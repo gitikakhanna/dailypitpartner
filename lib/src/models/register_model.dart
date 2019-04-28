@@ -3,25 +3,29 @@ import 'dart:convert';
 class Register{
   String name;
   String email;
-  String password;
+  String phoneno;
+  String address;
 
   Register({
     this.name,
     this.email,
-    this.password,
+    this.phoneno,
+    this.address,
   });
 
   Register.fromJson(Map<String, dynamic> parsedJson){
     name = parsedJson['name'];
-    email = parsedJson['email'];
-    password = parsedJson['password'];
+    email = parsedJson['emailid'];
+    phoneno = parsedJson['phoneno'];
+    address = parsedJson['address'];
   }
 
   Map<String, String> toMap(){
     return <String, String>{
       "name": name,
-      "email": email,
-      "password": password,
+      "emailid": email,
+      "phoneno": phoneno,
+      "address": address,
     };
   }
 }

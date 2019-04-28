@@ -4,7 +4,7 @@ import '../blocs/register_bloc.dart';
 
 class RegisterLayoutScreen extends StatelessWidget{
   Widget build(BuildContext context) {
-
+    
     final bloc = RegisterProvider.of(context);
     return Container(
       margin: EdgeInsets.all(30.0),
@@ -20,8 +20,8 @@ class RegisterLayoutScreen extends StatelessWidget{
           ),
           nameField(bloc),
           emailField(bloc),
-          passwordField(bloc),
-          confirmField(),
+          phoneField(bloc),
+          addressField(bloc),
           Container(
             margin: EdgeInsets.only(top: 25.0),
           ),
@@ -57,7 +57,6 @@ class RegisterLayoutScreen extends StatelessWidget{
           decoration: InputDecoration(
             hintText: 'you@example.com',
             labelText: 'Email address',
-            prefixIcon: Icon(Icons.mail_outline, size: 15.0,),
             errorText: snapshot.error,
           ),
           keyboardType: TextInputType.emailAddress,
@@ -66,32 +65,38 @@ class RegisterLayoutScreen extends StatelessWidget{
     );
 
   }
-  
-  Widget passwordField(RegisterBloc bloc){
+
+  Widget phoneField(RegisterBloc bloc){
     return StreamBuilder(
-      stream: bloc.password,
+      stream: bloc.phoneno,
       builder: (context, AsyncSnapshot<String> snapshot){
         return TextField(
-          obscureText: true,
-          onChanged: bloc.changePassword,
+          keyboardType: TextInputType.phone,
+          onChanged: bloc.changePhone,
           decoration: InputDecoration(
-            hintText: 'Password must contain atleast 6 characters',
-            labelText: 'Password',
+            hintText: 'Contact Number',
+            labelText: 'Contact Number',
             errorText: snapshot.error,
-            prefixIcon: Icon(Icons.vpn_key, size: 15.0,),
           ),
-        ); 
+        );
       },
     );
   }
 
-  Widget confirmField(){
-    return TextField(
-      obscureText: true,
-      decoration: InputDecoration(
-        hintText: 'Confirm Password',
-        labelText: 'Confirm Password',
-      ),
+  Widget addressField(RegisterBloc bloc){
+    return StreamBuilder(
+      stream: bloc.address,
+      builder: (context, AsyncSnapshot<String> snapshot){
+        return TextField(
+          keyboardType: TextInputType.multiline,
+          onChanged: bloc.changeAddress,
+          decoration: InputDecoration(
+            hintText: 'Address',
+            labelText: 'Complete Address',
+            errorText: snapshot.error,
+          ),
+        );
+      },
     );
   }
 
@@ -100,18 +105,17 @@ class RegisterLayoutScreen extends StatelessWidget{
       stream: bloc.submit,
       builder: (context, AsyncSnapshot<bool> snapshot){
         return RaisedButton(
-          onPressed: ()
-          {
-            snapshot.hasData ? (){
-              bloc.registerDataValue();
-            } : null;
-          },
+          onPressed: snapshot.hasData
+          ?(){bloc.registerDataValue();}
+          :null,
           child: Text('Register'),
           color: Colors.blue,
           textColor: Colors.white,
         );
-      },
+      }, 
     );
 
   }
 }
+
+

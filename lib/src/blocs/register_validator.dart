@@ -20,12 +20,22 @@ class Validator{
     }
   });
 
-  final validatePassword = StreamTransformer<String, String>.fromHandlers(handleData: (password, sink){
-    if(password.length>6){
-      sink.add(password);
+  final validatePhone = StreamTransformer<String, String>.fromHandlers(handleData: (phoneno, sink){
+    if(phoneno.length != 10){
+      sink.addError('Please enter a valid contact number');
     }
     else{
-      sink.addError('Password must be atleast 6 characters long');
+      sink.add(phoneno);
     }
   });
+
+  final validateAddress = StreamTransformer<String, String>.fromHandlers(handleData: (address, sink){
+    if(address.length != 0){
+      sink.add(address);
+    }
+    else{
+      sink.addError(address);
+    }
+  });
+
 }

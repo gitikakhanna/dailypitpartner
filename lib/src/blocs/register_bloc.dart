@@ -17,7 +17,9 @@ class RegisterBloc with Validator{
 
   final _nameController = BehaviorSubject<String>();
   final _emailController = BehaviorSubject<String>();
-  final _passwordController = BehaviorSubject<String>();
+  final _phoneController = BehaviorSubject<String>();
+  final _addressController = BehaviorSubject<String>();
+
 
   Function(String) get changeName => _nameController.sink.add;
   Observable<String> get name => _nameController.stream.transform(validateName);
@@ -25,25 +27,30 @@ class RegisterBloc with Validator{
   Function(String) get changeEmail => _emailController.sink.add;
   Observable<String> get email => _emailController.stream.transform(validateEmail);
 
-  Function(String) get changePassword => _passwordController.sink.add;
-  Observable<String> get password => _passwordController.stream.transform(validatePassword);
+  Function(String) get changePhone => _phoneController.sink.add; 
+  Observable<String> get phoneno => _phoneController.stream.transform(validatePhone);
 
-  Observable<bool> get submit => Observable.combineLatest3(name, email, password, (n, e, p) => true);
+  Function(String) get changeAddress => _addressController.sink.add;
+  Observable<String> get address => _addressController.stream.transform(validateAddress);
+
+  Observable<bool> get submit => Observable.combineLatest4(name, email, phoneno, address, (n, e, p, a) => true);
 
   registerDataValue(){
     final nameValue = _nameController.value;
-    final emailValue = _emailController.value;
-    final passwordValue = _passwordController.value;
+    final emailValue = _emailController.value;  
+    final phoneValue = _phoneController.value;
+    final addressValue = _addressController.value;
 
-    registerData(Register(
+    
+    registerData(Register(      
       name: nameValue,
       email: emailValue,
-      password: passwordValue,
+      phoneno: phoneValue,
+      address: addressValue,
     ));
 
+
   }
-
-
 
   _registerDataTransformer(){
     return  ScanStreamTransformer(
@@ -59,7 +66,8 @@ class RegisterBloc with Validator{
     _issuerDataStored.close();
     _nameController.close();
     _emailController.close();
-    _passwordController.close();
+    _phoneController.close();
+    _addressController.close();
   }
 
 }
