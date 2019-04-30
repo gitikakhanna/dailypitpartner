@@ -2,39 +2,41 @@ import 'package:flutter/material.dart';
 import '../blocs/register_provider.dart';
 import '../blocs/register_bloc.dart';
 
-class RegisterLayoutScreen extends StatelessWidget{
+
+class RegisterLayoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
-    
     final bloc = RegisterProvider.of(context);
-    return Container(
-      margin: EdgeInsets.all(30.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 80.0,
-            height: 80.0,
-            child: Image(
-              image: AssetImage("assets/logo.png"),
+    return Scaffold(
+      body: Container(
+        margin: EdgeInsets.all(30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: 80.0,
+              height: 80.0,
+              child: Image(
+                image: AssetImage("assets/logo.png"),
+              ),
             ),
-          ),
-          nameField(bloc),
-          emailField(bloc),
-          phoneField(bloc),
-          addressField(bloc),
-          Container(
-            margin: EdgeInsets.only(top: 25.0),
-          ),
-          submitButton(bloc),
-        ],
+            nameField(bloc),
+            emailField(bloc),
+            phoneField(bloc),
+            addressField(bloc),
+            Container(
+              margin: EdgeInsets.only(top: 25.0),
+            ),
+            submitButton(bloc),
+          ],
+        ),
       ),
     );
   }
 
-  Widget nameField(RegisterBloc bloc){
+  Widget nameField(RegisterBloc bloc) {
     return StreamBuilder(
       stream: bloc.name,
-      builder: (context, AsyncSnapshot<String> snapshot){
+      builder: (context, AsyncSnapshot<String> snapshot) {
         return TextField(
           onChanged: bloc.changeName,
           decoration: InputDecoration(
@@ -45,13 +47,12 @@ class RegisterLayoutScreen extends StatelessWidget{
         );
       },
     );
-    
   }
 
-  Widget emailField(RegisterBloc bloc){
+  Widget emailField(RegisterBloc bloc) {
     return StreamBuilder(
       stream: bloc.email,
-      builder: (context, AsyncSnapshot<String> snapshot){
+      builder: (context, AsyncSnapshot<String> snapshot) {
         return TextField(
           onChanged: bloc.changeEmail,
           decoration: InputDecoration(
@@ -60,16 +61,15 @@ class RegisterLayoutScreen extends StatelessWidget{
             errorText: snapshot.error,
           ),
           keyboardType: TextInputType.emailAddress,
-        );        
+        );
       },
     );
-
   }
 
-  Widget phoneField(RegisterBloc bloc){
+  Widget phoneField(RegisterBloc bloc) {
     return StreamBuilder(
       stream: bloc.phoneno,
-      builder: (context, AsyncSnapshot<String> snapshot){
+      builder: (context, AsyncSnapshot<String> snapshot) {
         return TextField(
           keyboardType: TextInputType.phone,
           onChanged: bloc.changePhone,
@@ -83,10 +83,10 @@ class RegisterLayoutScreen extends StatelessWidget{
     );
   }
 
-  Widget addressField(RegisterBloc bloc){
+  Widget addressField(RegisterBloc bloc) {
     return StreamBuilder(
       stream: bloc.address,
-      builder: (context, AsyncSnapshot<String> snapshot){
+      builder: (context, AsyncSnapshot<String> snapshot) {
         return TextField(
           keyboardType: TextInputType.multiline,
           onChanged: bloc.changeAddress,
@@ -100,22 +100,21 @@ class RegisterLayoutScreen extends StatelessWidget{
     );
   }
 
-  Widget submitButton(RegisterBloc bloc){
+  Widget submitButton(RegisterBloc bloc) {
     return StreamBuilder(
       stream: bloc.submit,
-      builder: (context, AsyncSnapshot<bool> snapshot){
+      builder: (context, AsyncSnapshot<bool> snapshot) {
         return RaisedButton(
           onPressed: snapshot.hasData
-          ?(){bloc.registerDataValue();}
-          :null,
+              ? () {
+                  bloc.registerDataValue();
+                }
+              : null,
           child: Text('Register'),
           color: Colors.blue,
           textColor: Colors.white,
         );
-      }, 
+      },
     );
-
   }
 }
-
-

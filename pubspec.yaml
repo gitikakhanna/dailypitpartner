@@ -20,9 +20,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  google_maps_flutter: ^0.0.3
+  # google_maps_flutter: ^0.0.3
   # flutter_google_places: ^0.1.4
-  location: ^1.4.1
+  location: ^2.3.5
   geocoder: ^0.1.2
 
   # The following adds the Cupertino Icons font to your application.
@@ -32,7 +32,9 @@ dependencies:
   path_provider: ^0.5.0+1
   http: any
   rxdart: ^0.21.0
-
+  firebase_auth:
+  firebase_messaging:  
+  cloud_firestore:
 
 dev_dependencies:
   flutter_test:

@@ -3,83 +3,88 @@ import '../blocs/login_bloc.dart';
 import '../blocs/login_provider.dart';
 import 'register_screen.dart';
 
-class LoginScreen extends StatelessWidget{
-  Widget build(context){
 
+// Use these to save data in the firestore
+//import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
+
+class LoginScreen extends StatelessWidget {
+  Widget build(context) {
     //for scoped instance of bloc
     final bloc = LoginProvider.of(context);
     //this line reaches the nearest provider of this context and return the bloc
-    return Align(
-      alignment: Alignment.center,
-      child:Container(
-        margin: EdgeInsets.all(40.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            emailField(bloc),
-            passwordField(bloc),
-            Container(
-              margin: EdgeInsets.only(top:20.0),
-            ),
-            Row(
-              children: [
-                submitButton(),
-                registerButton(context),
-              ],
-            ),
-          ],
-        ), 
+    return Scaffold(
+      body: Align(
+        alignment: Alignment.center,
+        child: Container(
+          margin: EdgeInsets.all(40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              emailField(bloc),
+              passwordField(bloc),
+              Container(
+                margin: EdgeInsets.only(top: 20.0),
+              ),
+              Row(
+                children: [
+                  submitButton(),
+                  registerButton(context),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget emailField(LoginBloc bloc){
+  Widget emailField(LoginBloc bloc) {
     // Stream Builder widget has two named parameters
     return StreamBuilder(
       stream: bloc.email,
-      builder: (context, snapshot){
+      builder: (context, snapshot) {
         //it is called everytime the stream comes with an event and changes
         //snapshot maintains info that came across the stream....AyncSnapshot class
         return TextField(
-          onChanged: (newValue){
+          onChanged: (newValue) {
             bloc.changeEmail(newValue);
-          },  
+          },
           //or onChanged: bloc.changeEmail;
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-          hintText: 'you@example.com',
-          labelText: 'Email Address',
-          errorText: snapshot.error,
+            hintText: 'you@example.com',
+            labelText: 'Email Address',
+            errorText: snapshot.error,
           ),
         );
       },
     );
-     
   }
 
-  Widget passwordField(LoginBloc bloc){
+  Widget passwordField(LoginBloc bloc) {
     return StreamBuilder(
       stream: bloc.password,
-      builder: (context, snapshot){
+      builder: (context, snapshot) {
         return TextField(
           onChanged: bloc.changePassword,
           obscureText: true,
           decoration: InputDecoration(
-          labelText: 'Password',
-          hintText: 'enter password',
-          errorText: snapshot.error,
+            labelText: 'Password',
+            hintText: 'enter password',
+            errorText: snapshot.error,
           ),
         );
       },
     );
-    
-    
   }
 
-  Widget submitButton(){
+  Widget submitButton() {
     return RaisedButton(
-      onPressed: (){
-
+      onPressed: () {
+        print('Jumping to next Screen');
+      
+        // Save freelancer's data with Firebase Messaging Token
       },
       child: Text('Login'),
       color: Colors.blue,
@@ -87,11 +92,11 @@ class LoginScreen extends StatelessWidget{
     );
   }
 
-  Widget registerButton(context){
+  Widget registerButton(context) {
     return RaisedButton(
-      onPressed: (){
+      onPressed: () {
         //navigate to register screen
-        navigateToRegister(context);
+       Navigator.pushNamed(context, '/r');
       },
       child: Text('Register'),
       color: Colors.blue,
@@ -99,8 +104,8 @@ class LoginScreen extends StatelessWidget{
     );
   }
 
-  Future navigateToRegister(BuildContext context) async{
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => RegisterScreen()));
+  Future navigateToRegister(BuildContext context) async {
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => RegisterScreen()));
   }
-
 }
