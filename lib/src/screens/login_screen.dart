@@ -2,13 +2,50 @@ import 'package:flutter/material.dart';
 import '../blocs/login_bloc.dart';
 import '../blocs/login_provider.dart';
 import 'register_screen.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 // Use these to save data in the firestore
 //import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  
+  
+  final _messaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    
+
+    _messaging.configure(onMessage: (Map<String, dynamic> map) async {
+      print('onMessage : ${map['data']['subCategoryId']}');
+      print('onMessage : ${map['data']['userId']}');
+      print('onMessage : ${map['data']['price']}');
+      print('onMessage : ${map['data']['orderId']}');
+      Navigator.pushNamed(context, '/n');
+    }, onLaunch: (Map<String, dynamic> map) async {
+      print('onLaunch : ${map['data']['subCategoryId']}');
+      print('onLaunch : ${map['data']['userId']}');
+      print('onLaunch : ${map['data']['price']}');
+      print('onLaunch : ${map['data']['orderId']}');
+      Navigator.pushNamed(context, '/n');
+    }, onResume: (Map<String, dynamic> map) async {
+      print('onResume : ${map['data']['subCategoryId']}');
+      print('onResume : ${map['data']['userId']}');
+      print('onResume : ${map['data']['price']}');
+      print('onResume : ${map['data']['orderId']}');
+      Navigator.pushNamed(context,'/n');
+    });
+  }
+  
   Widget build(context) {
     //for scoped instance of bloc
     final bloc = LoginProvider.of(context);
