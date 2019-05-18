@@ -46,11 +46,11 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                 padding: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                    color: Colors.blue),
+                    color: Colors.white),
                 child: Text(
                   'Customer Detail',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 20.0,
                   ),
                 ),
@@ -65,11 +65,11 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                 padding: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                    color: Colors.blue),
+                    color: Colors.white),
                 child: Text(
                   'Service Detail',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontSize: 20.0,
                   ),
                 ),
@@ -97,7 +97,7 @@ class OrderDetailBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.only(top: 0,bottom: 16.0,right: 16.0,left: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(6.0)),
         color: Colors.white,
@@ -165,7 +165,7 @@ class UserDetailBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.only(top: 0,bottom: 16.0,right: 16.0,left: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(6.0)),
         color: Colors.white,
@@ -226,15 +226,14 @@ class DeclineButton extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(8.0),
       width: double.infinity,
-      child: Center(
-        child: RaisedButton(
-          color: Colors.blue,
-          onPressed: () {},
-          child: Text(
-            'Decline',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+      child: RaisedButton(
+        color: Colors.blue,
+        onPressed: () {},
+        child: Text(
+          'Decline',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
           ),
         ),
       ),
@@ -253,36 +252,35 @@ class AcceptButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8.0),
+      margin: EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
       width: double.infinity,
-      child: Center(
-        child: RaisedButton(
-          color: Colors.blue,
-          onPressed: () {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context){
-                return AlertDialog(
-                  title: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              },
-            );
-            FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-              Firestore.instance.document('orders/$orderId').updateData({
-                'status': 'accepted',
-                'list': FieldValue.arrayUnion(<String>[user.uid])
-              });
-              Navigator.popAndPushNamed(context, '/d');
+      child: RaisedButton(
+        color: Colors.blue,
+        onPressed: () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context){
+              return AlertDialog(
+                title: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+          );
+          FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+            Firestore.instance.document('orders/$orderId').updateData({
+              'status': 'accepted',
+              'list': FieldValue.arrayUnion(<String>[user.uid])
             });
-          },
-          child: Text(
-            'Accept',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+            Navigator.popAndPushNamed(context, '/d');
+          });
+        },
+        child: Text(
+          'Accept',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20.0,
           ),
         ),
       ),

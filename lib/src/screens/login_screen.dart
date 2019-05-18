@@ -5,7 +5,7 @@ import 'register_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Use these to save data in the firestore
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,17 +14,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  
-  
   final _messaging = FirebaseMessaging();
-
-
-@override
+  String token;
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    
+    _messaging.getToken().then((t) {
+      print(t);
+      token = t;
+    });
 
     _messaging.configure(onMessage: (Map<String, dynamic> map) async {
       print('onMessage : ${map['data']['subCategoryId']}');
@@ -43,15 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
       print('onResume : ${map['data']['userId']}');
       print('onResume : ${map['data']['price']}');
       print('onResume : ${map['data']['orderId']}');
-      Navigator.pushNamed(context,'/n${map['data']['orderId']}');
+      Navigator.pushNamed(context, '/n${map['data']['orderId']}');
     });
 
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user){
-      if(user!=null){
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+      if (user != null) {
         Navigator.pushNamed(context, '/d');
       }
     });
   }
+
   Widget build(context) {
     //for scoped instance of bloc
     final bloc = LoginProvider.of(context);
@@ -65,12 +66,12 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                  width: 80.0,
-                  height: 80.0,
-                  child: Image(
-                    image: AssetImage("assets/logo.png"),
-                  ),
+                width: 80.0,
+                height: 80.0,
+                child: Image(
+                  image: AssetImage("assets/logo.png"),
                 ),
+              ),
               emailField(bloc),
               passwordField(bloc),
               Container(
@@ -134,30 +135,50 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget submitButton(LoginBloc bloc) {
     return StreamBuilder(
-      stream: bloc.submit,
-      builder: (context, snapshot) {
-        return RaisedButton(
-          onPressed: snapshot.hasData?(){
-            print('Test');
-            bloc.login().then((FirebaseUser user){
-              print('${user.email}');
-            }).catchError((e){
-              print('Error is $e');
-            });
-          }:null,
-          child: Text('Login'),
-          color: Colors.blue,
-          textColor: Colors.white,
-        );
-      }
-    );
+        stream: bloc.submit,
+        builder: (context, snapshot) {
+          return RaisedButton(
+            onPressed: snapshot.hasData
+                ? () {
+                    print('Test');
+                    bloc.login().then((FirebaseUser user) {
+                      print('${user.email}');
+
+                      Firestore.instance
+                          .collection('freelancer')
+                          .where('emailid', isEqualTo: user.email)
+                          .getDocuments()
+                          .then((QuerySnapshot sn) {
+                        print('Document Id ${sn.documents.first.documentID}');
+
+                        _messaging.getToken().then((token) {
+                          Firestore.instance
+                              .document(
+                                  'freelancer/${sn.documents.first.documentID}')
+                              .updateData({
+                            'freelancerid': user.uid,
+                            'token': token,
+                          });
+                          Navigator.popAndPushNamed(context, '/d');
+                        });
+                      });
+                    }).catchError((e) {
+                      print('Error is $e');
+                    });
+                  }
+                : null,
+            child: Text('Login'),
+            color: Colors.blue,
+            textColor: Colors.white,
+          );
+        });
   }
 
   Widget registerButton(context) {
     return RaisedButton(
       onPressed: () {
         //navigate to register screen
-       Navigator.pushNamed(context, '/r');
+        Navigator.pushNamed(context, '/r');
       },
       child: Text('Register'),
       color: Colors.blue,

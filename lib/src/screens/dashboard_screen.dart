@@ -24,7 +24,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user){
+      print(user.uid);
+    });
     statusColor = statusColors['unavailable'];
     statusText = 'Unavailable';
   }
@@ -79,7 +81,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       backgroundColor: Colors.blueGrey[50],
       body: SafeArea(
         child: ListView(
@@ -170,27 +171,82 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               ),
             ),
             // Change Status
-            Container(
-              margin: EdgeInsets.all(8.0),
-              child: RaisedButton(
-                color: Colors.blue,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    'Change Status',
-                    style: TextStyle(
-                      color: Colors.white,
+
+            //Show Requests
+            Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      color: Colors.blue[300],
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        height: 100,
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              'Change Status',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      onPressed: () {
+                        showStatusDialog();
+                      },
                     ),
                   ),
                 ),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                onPressed: () {
-                  showStatusDialog();
-                },
-              ),
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    margin: EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      color: Colors.blue[400],
+                      child: Container(
+                        height: 100,
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.build,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            Text(
+                              'Requests',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      onPressed: () {
+                        //Requests
+                        // Go To Request Page
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
