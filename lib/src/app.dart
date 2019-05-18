@@ -3,9 +3,9 @@ import 'screens/login_screen.dart';
 import 'blocs/login_provider.dart';
 import 'screens/register_layout_screen.dart';
 import 'screens/new_orders_screen.dart';
-//import 'screens/login_screen.dart';
+import 'screens/dashboard_screen.dart';
 import 'blocs/register_provider.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class App extends StatefulWidget {
   @override
@@ -35,9 +35,16 @@ class _AppState extends State<App> {
       return MaterialPageRoute(builder: (context) {
         return RegisterLayoutScreen();
       });
-    } else {
+    } else if (settings.name == '/d') {
       return MaterialPageRoute(builder: (context) {
-        return NewOrderScreen();
+        return DashBoardScreen();
+      });
+    } else if (settings.name.contains('/n')) {
+      return MaterialPageRoute(builder: (context) {
+        final id = settings.name.replaceFirst('/n', '');
+        return NewOrderScreen(
+          orderId: id,
+        );
       });
     }
   }

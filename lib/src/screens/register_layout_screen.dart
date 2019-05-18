@@ -2,32 +2,49 @@ import 'package:flutter/material.dart';
 import '../blocs/register_provider.dart';
 import '../blocs/register_bloc.dart';
 
-
 class RegisterLayoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = RegisterProvider.of(context);
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              width: 80.0,
-              height: 80.0,
-              child: Image(
-                image: AssetImage("assets/logo.png"),
-              ),
+      resizeToAvoidBottomPadding: false,
+      backgroundColor: Colors.blue[400],
+      body: SafeArea(
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
-            nameField(bloc),
-            emailField(bloc),
-            phoneField(bloc),
-            addressField(bloc),
-            Container(
-              margin: EdgeInsets.only(top: 25.0),
+            margin: EdgeInsets.all(30.0),
+            child: ListView(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 80.0,
+                ),
+                Container(
+                  width: 40.0,
+                  height: 40.0,
+                  child: Image(
+                    image: AssetImage("assets/logo.png"),
+                  ),
+                ),
+                 SizedBox(
+                  height: 20.0,
+                ),
+                nameField(bloc),
+                emailField(bloc),
+                phoneField(bloc),
+                addressField(bloc),
+                Container(
+                  margin: EdgeInsets.only(top: 25.0),
+                ),
+                submitButton(bloc),
+              ],
             ),
-            submitButton(bloc),
-          ],
+          ),
         ),
       ),
     );

@@ -3,7 +3,7 @@ import '../blocs/login_bloc.dart';
 import '../blocs/login_provider.dart';
 import 'register_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 // Use these to save data in the firestore
 //import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
@@ -18,7 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   
   final _messaging = FirebaseMessaging();
 
-  @override
+
+@override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -30,22 +31,27 @@ class _LoginScreenState extends State<LoginScreen> {
       print('onMessage : ${map['data']['userId']}');
       print('onMessage : ${map['data']['price']}');
       print('onMessage : ${map['data']['orderId']}');
-      Navigator.pushNamed(context, '/n');
+      Navigator.pushNamed(context, '/n${map['data']['orderId']}');
     }, onLaunch: (Map<String, dynamic> map) async {
       print('onLaunch : ${map['data']['subCategoryId']}');
       print('onLaunch : ${map['data']['userId']}');
       print('onLaunch : ${map['data']['price']}');
       print('onLaunch : ${map['data']['orderId']}');
-      Navigator.pushNamed(context, '/n');
+      Navigator.pushNamed(context, '/n${map['data']['orderId']}');
     }, onResume: (Map<String, dynamic> map) async {
       print('onResume : ${map['data']['subCategoryId']}');
       print('onResume : ${map['data']['userId']}');
       print('onResume : ${map['data']['price']}');
       print('onResume : ${map['data']['orderId']}');
-      Navigator.pushNamed(context,'/n');
+      Navigator.pushNamed(context,'/n${map['data']['orderId']}');
+    });
+
+    FirebaseAuth.instance.currentUser().then((FirebaseUser user){
+      if(user!=null){
+        Navigator.pushNamed(context, '/d');
+      }
     });
   }
-  
   Widget build(context) {
     //for scoped instance of bloc
     final bloc = LoginProvider.of(context);
@@ -58,6 +64,13 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                  width: 80.0,
+                  height: 80.0,
+                  child: Image(
+                    image: AssetImage("assets/logo.png"),
+                  ),
+                ),
               emailField(bloc),
               passwordField(bloc),
               Container(
@@ -65,7 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Row(
                 children: [
-                  submitButton(),
+                  submitButton(bloc),
+                  SizedBox(
+                    width: 16.0,
+                  ),
                   registerButton(context),
                 ],
               ),
@@ -116,16 +132,24 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget submitButton() {
-    return RaisedButton(
-      onPressed: () {
-        print('Jumping to next Screen');
-      
-        // Save freelancer's data with Firebase Messaging Token
-      },
-      child: Text('Login'),
-      color: Colors.blue,
-      textColor: Colors.white,
+  Widget submitButton(LoginBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.submit,
+      builder: (context, snapshot) {
+        return RaisedButton(
+          onPressed: snapshot.hasData?(){
+            print('Test');
+            bloc.login().then((FirebaseUser user){
+              print('${user.email}');
+            }).catchError((e){
+              print('Error is $e');
+            });
+          }:null,
+          child: Text('Login'),
+          color: Colors.blue,
+          textColor: Colors.white,
+        );
+      }
     );
   }
 
