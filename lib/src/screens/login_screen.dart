@@ -46,11 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
     //   Navigator.pushNamed(context, '/n${map['data']['orderId']}');
     // });
 
-    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      if (user != null) {
-        Navigator.pushNamed(context, '/d');
-      }
-    });
+    // FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
+    //   if (user != null) {
+    //     Navigator.pushNamed(context, '/d');
+    //   }
+    // });
   }
 
   Widget build(context) {
@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             'freelancerid': user.uid,
                             'token': token,
                           });
-                          Navigator.popAndPushNamed(context, '/d');
+                          Navigator.pop(context);
                         });
                       });
                     }).catchError((e) {

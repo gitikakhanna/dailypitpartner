@@ -3,123 +3,66 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class MainScreen extends StatefulWidget {
-  MainScreen({Key key}) : super(key: key);
-
-  _MainScreenState createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-  final List<Widget> _children = [
-    DashBoardScreen(),
-    DashBoardScreen(),
-    DashBoardScreen(),
-  ];
-
-  
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text(
-                'Home',
-                style:
-                    TextStyle(fontFamily: 'ProductSans', color: Colors.black),
-              )),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.assignment, color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text(
-                'My Orders',
-                style:
-                    TextStyle(fontFamily: 'ProductSans', color: Colors.black),
-              )),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle,
-                  color: Color.fromARGB(255, 0, 0, 0)),
-              title: new Text(
-                'My Account',
-                style:
-                    TextStyle(fontFamily: 'ProductSans', color: Colors.black),
-              )),
-        ],
-      ),
-      body: _children[_currentIndex],
-    );
-  }
-}
-
 class DashBoardScreen extends StatefulWidget {
   DashBoardScreen({Key key}) : super(key: key);
 
   _DashBoardScreenState createState() => _DashBoardScreenState();
 }
 
+Map<String, Color> statusColors = {
+  'online': Colors.green[300],
+  'offline': Colors.red[300],
+  'unavailable': Colors.grey,
+  'assigned': Colors.yellow[300],
+};
+
 class _DashBoardScreenState extends State<DashBoardScreen> {
   Color statusColor;
   String statusText;
   Widget notifyWidget = NotifyWidget();
-  Map<String, Color> statusColors = {
-    'online': Colors.green[300],
-    'offline': Colors.red[300],
-    'unavailable': Colors.grey,
-    'assigned': Colors.yellow[300],
-  };
+  String userId;
   final _messaging = FirebaseMessaging();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      print(user.uid);
+      if (user == null) {
+        Navigator.pushNamed(context, '/l');
+      } else {
+        setState(() {
+          userId = user.uid;
+        });
+      }
+    });
+
+    _messaging.getToken().then((token) {
+      print(token);
     });
 
     _messaging.configure(onMessage: (Map<String, dynamic> map) async {
-      print('onMessage : ${map['data']['subCategoryId']}');
-      print('onMessage : ${map['data']['userId']}');
-      print('onMessage : ${map['data']['price']}');
-      print('onMessage : ${map['data']['orderId']}');
       setState(() {
-       notifyWidget = ServiceNotifyWidget(orderId : map['data']['orderId']);
+        notifyWidget = ServiceNotifyWidget(
+            orderId: map['data']['orderId'], notifyParent: refresh);
       });
-      //Navigator.pushNamed(context, '/n${map['data']['orderId']}');
     }, onLaunch: (Map<String, dynamic> map) async {
-      print('onLaunch : ${map['data']['subCategoryId']}');
-      print('onLaunch : ${map['data']['userId']}');
-      print('onLaunch : ${map['data']['price']}');
-      print('onLaunch : ${map['data']['orderId']}');
       setState(() {
-       notifyWidget = ServiceNotifyWidget(orderId : map['data']['orderId']);
+        notifyWidget = ServiceNotifyWidget(
+            orderId: map['data']['orderId'], notifyParent: refresh);
       });
-      //Navigator.pushNamed(context, '/n${map['data']['orderId']}');
     }, onResume: (Map<String, dynamic> map) async {
-      print('onResume : ${map['data']['subCategoryId']}');
-      print('onResume : ${map['data']['userId']}');
-      print('onResume : ${map['data']['price']}');
-      print('onResume : ${map['data']['orderId']}');
       setState(() {
-       notifyWidget = ServiceNotifyWidget(orderId : map['data']['orderId']);
+        notifyWidget = ServiceNotifyWidget(
+            orderId: map['data']['orderId'], notifyParent: refresh);
       });
-      //Navigator.pushNamed(context, '/n${map['data']['orderId']}');
     });
-
 
     statusColor = statusColors['unavailable'];
     statusText = 'Unavailable';
   }
 
-  showStatusDialog() {
+  showStatusDialog(String docId) {
     showDialog(
         barrierDismissible: true,
         context: context,
@@ -133,6 +76,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 ListTile(
                   leading: Text('Online'),
                   onTap: () {
+                    Firestore.instance
+                        .document('freelancer/$docId')
+                        .updateData({'active': 'online'});
+
                     setState(() {
                       statusColor = statusColors['online'];
                       statusText = 'Online';
@@ -144,6 +91,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 ListTile(
                   leading: Text('Offline'),
                   onTap: () {
+                    Firestore.instance
+                        .document('freelancer/$docId')
+                        .updateData({'active': 'offline'});
+
                     setState(() {
                       statusColor = statusColors['offline'];
                       statusText = 'Offline';
@@ -154,6 +105,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 ListTile(
                   leading: Text('Assigned'),
                   onTap: () {
+                    Firestore.instance
+                        .document('freelancer/$docId')
+                        .updateData({'active': 'assigned'});
+
                     setState(() {
                       statusColor = statusColors['assigned'];
                       statusText = 'Assigned';
@@ -167,6 +122,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         });
   }
 
+  refresh() {
+    setState(() {
+      notifyWidget = NotifyWidget();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -176,28 +137,99 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             height: 8.0,
           ),
           // Freelancer Detail
+          new FreelancerDetailWidget(
+            statusColor: statusColor,
+            statusText: statusText,
+            userId: userId,
+          ),
+          Container(
+            //alignment: Alignment.center,
+            margin: EdgeInsets.all(8.0),
+            child: RaisedButton(
+              color: Colors.blue[300],
+              child: Text('Change Status'),
+              textColor: Colors.white,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              onPressed: () {
+                Firestore.instance
+                    .collection('freelancer')
+                    .where('freelancerid', isEqualTo: userId)
+                    .getDocuments()
+                    .then((QuerySnapshot sn) {
+                  showStatusDialog(sn.documents.first.documentID);
+                });
+              },
+            ),
+          ),
+          //Show Request
+          notifyWidget,
+        ],
+      ),
+    );
+  }
+}
+
+class FreelancerDetailWidget extends StatelessWidget {
+  const FreelancerDetailWidget({
+    Key key,
+    @required this.statusColor,
+    @required this.statusText,
+    @required this.userId,
+  }) : super(key: key);
+
+  final Color statusColor;
+  final String statusText;
+  final String userId;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        children: <Widget>[
+          // Profile Image
+          SizedBox(
+            height: 10.0,
+          ),
           Container(
             margin: EdgeInsets.all(8.0),
+            height: 120,
+            width: 120,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.lightBlue[50],
+              borderRadius: BorderRadius.all(Radius.circular(80.0)),
             ),
-            child: Column(
-              children: <Widget>[
-                // Profile Image
-                SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  margin: EdgeInsets.all(8.0),
-                  height: 120,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.lightBlue[50],
-                    borderRadius: BorderRadius.all(Radius.circular(80.0)),
-                  ),
-                ),
-                // Freelancer Status
-                Row(
+          ),
+          // Freelancer Status
+          StreamBuilder(
+              stream: Firestore.instance
+                  .collection('freelancer')
+                  .where('freelancerid', isEqualTo: userId)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      //status color
+                      Container(
+                        margin: EdgeInsets.all(8.0),
+                        height: 15,
+                        width: 15,
+                        decoration: BoxDecoration(
+                          color: statusColor,
+                          borderRadius: BorderRadius.all(Radius.circular(80.0)),
+                        ),
+                      ),
+                      Text(
+                        '$statusText',
+                      ),
+                    ],
+                  );
+                }
+                return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     //status color
@@ -206,78 +238,85 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       height: 15,
                       width: 15,
                       decoration: BoxDecoration(
-                        color: statusColor,
+                        color: statusColors[
+                            '${snapshot.data.documents.first.data['active']}'],
                         borderRadius: BorderRadius.all(Radius.circular(80.0)),
                       ),
                     ),
                     Text(
-                      '$statusText',
+                      '${snapshot.data.documents.first.data['active']}',
                     ),
                   ],
-                ),
-                //Freelancer Name
-                Container(
-                  margin: EdgeInsets.only(bottom: 8.0, top: 4.0),
-                  alignment: Alignment.center,
-                  child: StreamBuilder(
-                    stream: null,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Container(
-                          child: Text(
-                            'Name',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                            ),
-                          ),
-                        );
-                      }
-                    },
+                );
+              }),
+          //Freelancer Name
+          Container(
+            margin: EdgeInsets.only(bottom: 8.0, top: 4.0),
+            alignment: Alignment.center,
+            child: StreamBuilder(
+              stream: Firestore.instance
+                  .collection('freelancer')
+                  .where('freelancerid', isEqualTo: userId)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Container(
+                    child: Text(
+                      'Name',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                      ),
+                    ),
+                  );
+                }
+                return Container(
+                  child: Text(
+                    '${snapshot.data.documents.first.data['name']}',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                    ),
                   ),
-                ),
-                //Freelance Email Perhaps
-                Container(
-                  alignment: Alignment.center,
-                  child: StreamBuilder(
-                    stream: null,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Container(
-                          child: Text(
-                            'Email',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Container(
-                  //alignment: Alignment.center,
-                  margin: EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    color: Colors.blue[300],
-                    child: Text('Change Status'),
-                    textColor: Colors.white,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    onPressed: () {
-                      showStatusDialog();
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-              ],
+                );
+              },
             ),
           ),
-          //Show Request
-          notifyWidget,
+          //Freelance Email Perhaps
+          Container(
+            alignment: Alignment.center,
+            child: StreamBuilder(
+              stream: Firestore.instance
+                  .collection('freelancer')
+                  .where('freelancerid', isEqualTo: userId)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Container(
+                    child: Text(
+                      'Email',
+                      style: TextStyle(
+                        fontSize: 24.0,
+                      ),
+                    ),
+                  );
+                }
+                return Container(
+                  child: Text(
+                    '${snapshot.data.documents.first.data['emailid']}',
+                    style: TextStyle(
+                      fontSize: 24.0,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+
+          SizedBox(
+            height: 10.0,
+          ),
         ],
       ),
     );
@@ -289,20 +328,32 @@ class NotifyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      child: Text('Khali hai'),
+      margin: EdgeInsets.all(8.0),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: Colors.white),
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Text(
+          'No New Orders',
+          style: TextStyle(fontSize: 20.0, color: Colors.grey[400]),
+        ),
+      ),
     );
   }
 }
 
-class ServiceNotifyWidget extends StatelessWidget {
-
+class ServiceNotifyWidget extends StatefulWidget {
   final String orderId;
+  final Function notifyParent;
+  const ServiceNotifyWidget(
+      {Key key, this.orderId, @required this.notifyParent})
+      : super(key: key);
 
+  @override
+  _ServiceNotifyWidgetState createState() => _ServiceNotifyWidgetState();
+}
 
-  const ServiceNotifyWidget({
-    Key key,this.orderId
-  }) : super(key: key);
-
+class _ServiceNotifyWidgetState extends State<ServiceNotifyWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -311,12 +362,40 @@ class ServiceNotifyWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           ListTile(
-            title: Text(
-              'Shubham ne request bheji hai',
-              style: TextStyle(
-                fontSize: 18.0,
-              ),
-            ),
+            title: StreamBuilder(
+                stream: Firestore.instance
+                    .document('orders/${widget.orderId}')
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                  return StreamBuilder(
+                      stream: Firestore.instance
+                          .collection('users')
+                          .where('userid',
+                              isEqualTo: snapshot.data.data['userId'])
+                          .snapshots(),
+                      builder: (context,
+                          AsyncSnapshot<QuerySnapshot> userDataSnapshot) {
+                        if (!userDataSnapshot.hasData) {
+                          return ListTile(
+                            title: Text('Loading'),
+                          );
+                        }
+                        return Text(
+                          '${userDataSnapshot.data.documents.first['name']} has send a service request',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        );
+                      });
+                }),
             trailing: FlatButton(
               onPressed: () {},
               color: Colors.white,
@@ -336,13 +415,17 @@ class ServiceNotifyWidget extends StatelessWidget {
                 flex: 1,
                 child: FlatButton(
                   onPressed: () {
-                    FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-            Firestore.instance.document('orders/$orderId').updateData({
-              'status': 'accepted',
-              'list': FieldValue.arrayUnion(<String>[user.uid])
-            });
-            Navigator.popAndPushNamed(context, '/d');
-          });
+                    FirebaseAuth.instance
+                        .currentUser()
+                        .then((FirebaseUser user) {
+                      Firestore.instance
+                          .document('orders/${widget.orderId}')
+                          .updateData({
+                        'status': 'accepted',
+                        'list': FieldValue.arrayUnion(<String>[user.uid])
+                      });
+                      //Navigator.popAndPushNamed(context, '/d');
+                    });
                   },
                   color: Colors.green[300],
                   child: Text(
@@ -356,7 +439,9 @@ class ServiceNotifyWidget extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    widget.notifyParent();
+                  },
                   color: Colors.red[300],
                   child: Text(
                     'Decline',
