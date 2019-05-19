@@ -26,25 +26,25 @@ class _LoginScreenState extends State<LoginScreen> {
       token = t;
     });
 
-    _messaging.configure(onMessage: (Map<String, dynamic> map) async {
-      print('onMessage : ${map['data']['subCategoryId']}');
-      print('onMessage : ${map['data']['userId']}');
-      print('onMessage : ${map['data']['price']}');
-      print('onMessage : ${map['data']['orderId']}');
-      Navigator.pushNamed(context, '/n${map['data']['orderId']}');
-    }, onLaunch: (Map<String, dynamic> map) async {
-      print('onLaunch : ${map['data']['subCategoryId']}');
-      print('onLaunch : ${map['data']['userId']}');
-      print('onLaunch : ${map['data']['price']}');
-      print('onLaunch : ${map['data']['orderId']}');
-      Navigator.pushNamed(context, '/n${map['data']['orderId']}');
-    }, onResume: (Map<String, dynamic> map) async {
-      print('onResume : ${map['data']['subCategoryId']}');
-      print('onResume : ${map['data']['userId']}');
-      print('onResume : ${map['data']['price']}');
-      print('onResume : ${map['data']['orderId']}');
-      Navigator.pushNamed(context, '/n${map['data']['orderId']}');
-    });
+    // _messaging.configure(onMessage: (Map<String, dynamic> map) async {
+    //   print('onMessage : ${map['data']['subCategoryId']}');
+    //   print('onMessage : ${map['data']['userId']}');
+    //   print('onMessage : ${map['data']['price']}');
+    //   print('onMessage : ${map['data']['orderId']}');
+    //   Navigator.pushNamed(context, '/n${map['data']['orderId']}');
+    // }, onLaunch: (Map<String, dynamic> map) async {
+    //   print('onLaunch : ${map['data']['subCategoryId']}');
+    //   print('onLaunch : ${map['data']['userId']}');
+    //   print('onLaunch : ${map['data']['price']}');
+    //   print('onLaunch : ${map['data']['orderId']}');
+    //   Navigator.pushNamed(context, '/n${map['data']['orderId']}');
+    // }, onResume: (Map<String, dynamic> map) async {
+    //   print('onResume : ${map['data']['subCategoryId']}');
+    //   print('onResume : ${map['data']['userId']}');
+    //   print('onResume : ${map['data']['price']}');
+    //   print('onResume : ${map['data']['orderId']}');
+    //   Navigator.pushNamed(context, '/n${map['data']['orderId']}');
+    // });
 
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       if (user != null) {

@@ -37,7 +37,7 @@ class _AppState extends State<App> {
       });
     } else if (settings.name == '/d') {
       return MaterialPageRoute(builder: (context) {
-        return DashBoardScreen();
+        return MainScreen();
       });
     } else if (settings.name.contains('/n')) {
       return MaterialPageRoute(builder: (context) {
