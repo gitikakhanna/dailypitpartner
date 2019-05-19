@@ -122,9 +122,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         });
   }
 
-  refresh() {
+  refresh(int temp) {
     setState(() {
+      if(temp==1) // Decline Button
       notifyWidget = NotifyWidget();
+      else if(temp==0) // Accept Button
+      notifyWidget = AcceptNotifyWidget();
     });
   }
 
@@ -342,9 +345,28 @@ class NotifyWidget extends StatelessWidget {
   }
 }
 
+class AcceptNotifyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      margin: EdgeInsets.all(8.0),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: Colors.white),
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Text(
+          'We will notify you with the update',
+          style: TextStyle(fontSize: 20.0, color: Colors.grey[400]),
+        ),
+      ),
+    );
+  }
+}
+
 class ServiceNotifyWidget extends StatefulWidget {
   final String orderId;
-  final Function notifyParent;
+  final Function(int) notifyParent;
   const ServiceNotifyWidget(
       {Key key, this.orderId, @required this.notifyParent})
       : super(key: key);
@@ -397,7 +419,11 @@ class _ServiceNotifyWidgetState extends State<ServiceNotifyWidget> {
                       });
                 }),
             trailing: FlatButton(
-              onPressed: () {},
+              onPressed: () async{
+                var result =await Navigator.pushNamed(context, '/n${widget.orderId}');
+                print('result is $result');
+                widget.notifyParent(result);
+              },
               color: Colors.white,
               child: Text(
                 'Details',
@@ -424,7 +450,7 @@ class _ServiceNotifyWidgetState extends State<ServiceNotifyWidget> {
                         'status': 'accepted',
                         'list': FieldValue.arrayUnion(<String>[user.uid])
                       });
-                      //Navigator.popAndPushNamed(context, '/d');
+                      widget.notifyParent(0);
                     });
                   },
                   color: Colors.green[300],
@@ -440,7 +466,7 @@ class _ServiceNotifyWidgetState extends State<ServiceNotifyWidget> {
                 flex: 1,
                 child: FlatButton(
                   onPressed: () {
-                    widget.notifyParent();
+                    widget.notifyParent(1);
                   },
                   color: Colors.red[300],
                   child: Text(

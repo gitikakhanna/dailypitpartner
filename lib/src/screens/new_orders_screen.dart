@@ -228,7 +228,7 @@ class DeclineButton extends StatelessWidget {
       width: double.infinity,
       child: RaisedButton(
         color: Colors.blue,
-        onPressed: () {},
+        onPressed: () {Navigator.pop(context,1);},
         child: Text(
           'Decline',
           style: TextStyle(
@@ -273,7 +273,9 @@ class AcceptButton extends StatelessWidget {
               'status': 'accepted',
               'list': FieldValue.arrayUnion(<String>[user.uid])
             });
-            Navigator.popAndPushNamed(context, '/d');
+            print(user.uid);
+            Navigator.pop(context);
+            Navigator.pop(context,0);
           });
         },
         child: Text(
