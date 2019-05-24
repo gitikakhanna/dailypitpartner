@@ -125,6 +125,7 @@ class RegisterLayoutScreen extends StatelessWidget {
           onPressed: snapshot.hasData
               ? () {
                   bloc.registerDataValue();
+                  Navigator.pop(context);
                 }
               : null,
           child: Text('Register'),

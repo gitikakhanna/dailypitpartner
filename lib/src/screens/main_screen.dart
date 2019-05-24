@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'dashboard_screen.dart';
 import 'my_order_screen.dart';
-
+import 'my_account_screen.dart';
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
 
@@ -16,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _children = [
     DashBoardScreen(),
     MyOrderScreen(),
-    DashBoardScreen(),
+    MyAccountScreen(),
   ];
 
   @override

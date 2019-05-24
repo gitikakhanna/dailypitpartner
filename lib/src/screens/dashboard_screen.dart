@@ -149,7 +149,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             //alignment: Alignment.center,
             margin: EdgeInsets.all(8.0),
             child: RaisedButton(
-              color: Colors.blue[300],
+              color: Colors.blue,
               child: Text('Change Status'),
               textColor: Colors.white,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
