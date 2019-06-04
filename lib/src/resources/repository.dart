@@ -19,4 +19,8 @@ class Repository{
   Future<bool> updateStatus(String orderId) async {
     return await apiProvider.updateStatus(orderId);
   }
+
+  Future<List<OrderModel>> fetchMyOrders(String freelancerId) async {
+    return await apiProvider.fetchMyOrders(freelancerId);
+  }
 }

@@ -45,12 +45,23 @@ class DailypitApiProvider{
     );
     int res = int.parse(response.body);
     assert(res is int);
-    print('response is $res');
+    //print('response is $res');
     if (res == 1) {
       return true;
     } else {
       return false;
     }
+  }
+
+  Future<List<OrderModel>> fetchMyOrders(String freelancerId) async {
+    final response = await client.post(
+      '$_reusableRoot/get_assigned_orders.php',
+      body: {'id': freelancerId},
+    );
+    print('response is ${response.body}');
+    return (json.decode(response.body) as List).map((e) {
+      return OrderModel.fromJson(e);
+    }).toList();
   }
 
 }
