@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 // Use these to save data in the firestore
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,11 +18,44 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _messaging = FirebaseMessaging();
   String token;
+  GoogleSignIn _googleSignIn = new GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
+
+  initLogin() {
+    _googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount account) async {
+      if (account != null) {
+        // user logged
+        print('Account ID'+account.id);
+        
+      } else {
+        // user NOT logged
+      }
+    });
+    _googleSignIn.signInSilently().whenComplete(() => {});
+  }
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _handleSignOut() async {
+    _googleSignIn.disconnect();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    initLogin();
     _messaging.getToken().then((t) {
       print(t);
       token = t;
@@ -84,6 +119,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 16.0,
                   ),
                   registerButton(context),
+                  SizedBox(
+                    width: 16.0,
+                  ),
+                  RaisedButton(
+                    onPressed: () => _handleSignIn(),
+                    child: Text("Login G+"),
+                    color: Colors.primaries[0],
+                  )
                 ],
               ),
             ],

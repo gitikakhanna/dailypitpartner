@@ -43,18 +43,36 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
     _messaging.configure(onMessage: (Map<String, dynamic> map) async {
       setState(() {
-        notifyWidget = ServiceNotifyWidget(
+        if(map['data']['id']=='1'){
+          notifyWidget = ServiceNotifyWidget(
             orderId: map['data']['orderId'], notifyParent: refresh);
+        }else if(map['data']['id']=='2'){ 
+          notifyWidget = NotifyWidget();
+          Navigator.pushNamed(context, '/c${map['data']['orderId']}');
+        }
+        
       });
     }, onLaunch: (Map<String, dynamic> map) async {
       setState(() {
-        notifyWidget = ServiceNotifyWidget(
+        if(map['data']['id']=='1'){
+          notifyWidget = ServiceNotifyWidget(
             orderId: map['data']['orderId'], notifyParent: refresh);
+        }else if(map['data']['id']=='2'){ 
+          notifyWidget = NotifyWidget();
+          Navigator.pushNamed(context, '/c${map['data']['orderId']}');
+        }
+        
       });
     }, onResume: (Map<String, dynamic> map) async {
       setState(() {
-        notifyWidget = ServiceNotifyWidget(
+        if(map['data']['id']=='1'){
+          notifyWidget = ServiceNotifyWidget(
             orderId: map['data']['orderId'], notifyParent: refresh);
+        }else if(map['data']['id']=='2'){ 
+          notifyWidget = NotifyWidget();
+          Navigator.pushNamed(context, '/c${map['data']['orderId']}');
+        }
+        
       });
     });
 
@@ -447,7 +465,7 @@ class _ServiceNotifyWidgetState extends State<ServiceNotifyWidget> {
                       Firestore.instance
                           .document('orders/${widget.orderId}')
                           .updateData({
-                        'status': 'accepted',
+                        //'status': 'accepted',
                         'list': FieldValue.arrayUnion(<String>[user.uid])
                       });
                       widget.notifyParent(0);

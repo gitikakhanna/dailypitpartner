@@ -45,12 +45,10 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                       ),
                     );
                   }
-                  if(userSnapshot.data.documents.length == 0){
+                  if (userSnapshot.data.documents.length == 0) {
                     return ListTile(
-                      title: Text(
-                        'Please Login to get full experience'
-                      ),
-                    ); 
+                      title: Text('Please Login to get full experience'),
+                    );
                   }
 
                   return ListTile(
@@ -60,12 +58,19 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                       style: TextStyle(
                         fontSize: 20,
                       ),
-                      ),
-                    subtitle: Text('${userSnapshot.data.documents.first.data['emailid']}'),
-                    trailing: Text('${userSnapshot.data.documents.first.data['phoneno']}',
+                    ),
+                    subtitle: Text(
+                      '${userSnapshot.data.documents.first.data['phoneno']}',
                       style: TextStyle(
                         fontSize: 18,
-                      ),),
+                      ),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: (){
+                        print("Go to My Profile editable");
+                      },
+                    ),
                   );
                 },
               );
@@ -103,6 +108,18 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
           ),
           Divider(
             height: 8.0,
+          ),
+          Container(
+            margin: EdgeInsets.all(8.0),
+            child: RaisedButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.popAndPushNamed(context, '/l');
+              },
+              textColor: Colors.white,
+              color: Colors.blue,
+              child: Text('Sign Out'),
+            ),
           ),
         ],
       ),

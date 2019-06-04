@@ -1,3 +1,4 @@
+import 'package:dailypitpartner/src/screens/current_order_screen.dart';
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
 import 'blocs/login_provider.dart';
@@ -40,7 +41,15 @@ class _AppState extends State<App> {
       return MaterialPageRoute(builder: (context) {
         return LoginScreen();
       });
-    } else if (settings.name.contains('/n')) {
+    } else if (settings.name.contains('/c')) {
+      return MaterialPageRoute(builder: (context) {
+        final id = settings.name.replaceFirst('/c', '');
+        return CurrentOrderScreen(
+          orderId:id,
+        );
+      });
+    }
+     else if (settings.name.contains('/n')) {
       return MaterialPageRoute(builder: (context) {
         final id = settings.name.replaceFirst('/n', '');
         return NewOrderScreen(

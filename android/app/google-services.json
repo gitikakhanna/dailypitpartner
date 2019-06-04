@@ -52,11 +52,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "576098212055-tp23i2npda9mih9phfdfdp9m7turkssd.apps.googleusercontent.com",
+          "client_id": "576098212055-np517mqi93or80im2047258unql3ibqb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.dailypitpartner",
-            "certificate_hash": "a5912486e5a61ad49be71d035e620353b0fc3cf1"
+            "certificate_hash": "25a1c0b2b6d153350ebf8330b4068d5f3e1431f1"
           }
         },
         {
