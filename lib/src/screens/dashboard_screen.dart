@@ -48,6 +48,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             orderId: map['data']['orderId'], notifyParent: refresh);
         }else if(map['data']['id']=='2'){ 
           notifyWidget = NotifyWidget();
+          statusText = 'assigned';
+          statusColor = statusColors['assigned'];
           Navigator.pushNamed(context, '/c${map['data']['orderId']}');
         }
         
@@ -59,6 +61,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             orderId: map['data']['orderId'], notifyParent: refresh);
         }else if(map['data']['id']=='2'){ 
           notifyWidget = NotifyWidget();
+          statusText = 'assigned';
+          statusColor = statusColors['assigned'];
           Navigator.pushNamed(context, '/c${map['data']['orderId']}');
         }
         
@@ -70,6 +74,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             orderId: map['data']['orderId'], notifyParent: refresh);
         }else if(map['data']['id']=='2'){ 
           notifyWidget = NotifyWidget();
+          statusText = 'assigned';
+          statusColor = statusColors['assigned'];
           Navigator.pushNamed(context, '/c${map['data']['orderId']}');
         }
         

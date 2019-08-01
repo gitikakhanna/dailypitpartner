@@ -30,8 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         .listen((GoogleSignInAccount account) async {
       if (account != null) {
         // user logged
-        print('Account ID'+account.id);
-        
+        print('Account ID' + account.id);
       } else {
         // user NOT logged
       }
@@ -97,38 +96,61 @@ class _LoginScreenState extends State<LoginScreen> {
         alignment: Alignment.center,
         child: Container(
           margin: EdgeInsets.all(40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisSize: MainAxisSize.max,
             children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 50,
+              ),
               Container(
-                width: 80.0,
-                height: 80.0,
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width / 10,
+                height: MediaQuery.of(context).size.height / 10,
                 child: Image(
                   image: AssetImage("assets/logo.png"),
                 ),
               ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(8.0),
+                child: Text(
+                  'Dailypit Partner',
+                  style: TextStyle(
+                    color: Colors.blue[600],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 16.0,
+              ),
               emailField(bloc),
+              SizedBox(
+                height: 8.0,
+              ),
               passwordField(bloc),
               Container(
-                margin: EdgeInsets.only(top: 20.0),
+                margin: EdgeInsets.only(top: 32.0),
               ),
-              Row(
-                children: [
-                  submitButton(bloc),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  registerButton(context),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  RaisedButton(
-                    onPressed: () => _handleSignIn(),
-                    child: Text("Login G+"),
-                    color: Colors.primaries[0],
-                  )
-                ],
+              submitButton(bloc),
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 5,
               ),
+              Container(
+                alignment:Alignment.center,
+                margin: EdgeInsets.all(8.0),
+                child: Text('Want to provide services ? Join Us',
+                style: TextStyle(
+                  fontSize: 18.0,
+                ),),
+              ),
+              Container(child: registerButton(context)),
             ],
           ),
         ),
@@ -150,6 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
           //or onChanged: bloc.changeEmail;
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
+            border: OutlineInputBorder(),
             hintText: 'you@example.com',
             labelText: 'Email Address',
             errorText: snapshot.error,
@@ -170,6 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
             labelText: 'Password',
             hintText: 'enter password',
             errorText: snapshot.error,
+            border: OutlineInputBorder(),
           ),
         );
       },
@@ -210,7 +234,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   }
                 : null,
-            child: Text('Login'),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
             color: Colors.blue,
             textColor: Colors.white,
           );
@@ -223,7 +255,13 @@ class _LoginScreenState extends State<LoginScreen> {
         //navigate to register screen
         Navigator.pushNamed(context, '/r');
       },
-      child: Text('Register'),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Text('Register',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),),
+      ),
       color: Colors.blue,
       textColor: Colors.white,
     );

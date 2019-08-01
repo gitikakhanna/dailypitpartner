@@ -6,37 +6,57 @@ class RegisterLayoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = RegisterProvider.of(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      backgroundColor: Colors.blue[400],
+      //resizeToAvoidBottomPadding: false,
+      //backgroundColor: Colors.blue[400],
       body: SafeArea(
         child: Align(
           alignment: Alignment.center,
           child: Container(
-            padding: EdgeInsets.all(20.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
-            ),
-            margin: EdgeInsets.all(30.0),
+            margin: EdgeInsets.all(40.0),
             child: ListView(
               //mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 80.0,
+                  height: MediaQuery.of(context).size.height / 50,
                 ),
                 Container(
-                  width: 40.0,
-                  height: 40.0,
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width / 10,
+                  height: MediaQuery.of(context).size.height / 10,
                   child: Image(
                     image: AssetImage("assets/logo.png"),
                   ),
                 ),
-                 SizedBox(
-                  height: 20.0,
+                SizedBox(
+                  height: 8.0,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Dailypit Partner',
+                    style: TextStyle(
+                      color: Colors.blue[600],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 16.0,
                 ),
                 nameField(bloc),
+                SizedBox(
+                  height: 8.0,
+                ),
                 emailField(bloc),
+                SizedBox(
+                  height: 8.0,
+                ),
                 phoneField(bloc),
+                SizedBox(
+                  height: 8.0,
+                ),
                 addressField(bloc),
                 Container(
                   margin: EdgeInsets.only(top: 25.0),
@@ -60,6 +80,7 @@ class RegisterLayoutScreen extends StatelessWidget {
             hintText: 'Full Name',
             labelText: 'Name',
             errorText: snapshot.error,
+            border: OutlineInputBorder(),
           ),
         );
       },
@@ -76,6 +97,7 @@ class RegisterLayoutScreen extends StatelessWidget {
             hintText: 'you@example.com',
             labelText: 'Email address',
             errorText: snapshot.error,
+            border: OutlineInputBorder(),
           ),
           keyboardType: TextInputType.emailAddress,
         );
@@ -94,6 +116,7 @@ class RegisterLayoutScreen extends StatelessWidget {
             hintText: 'Contact Number',
             labelText: 'Contact Number',
             errorText: snapshot.error,
+            border: OutlineInputBorder(),
           ),
         );
       },
@@ -111,6 +134,7 @@ class RegisterLayoutScreen extends StatelessWidget {
             hintText: 'Address',
             labelText: 'Complete Address',
             errorText: snapshot.error,
+            border: OutlineInputBorder(),
           ),
         );
       },
@@ -124,11 +148,42 @@ class RegisterLayoutScreen extends StatelessWidget {
         return RaisedButton(
           onPressed: snapshot.hasData
               ? () {
-                  bloc.registerDataValue();
-                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Register your data ?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          FlatButton(
+                            child: Text('Confirm'),
+                            onPressed: () {
+                              bloc.registerDataValue();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 }
               : null,
-          child: Text('Register'),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              'Register',
+              style: TextStyle(
+                fontSize: 24.0,
+              ),
+            ),
+          ),
           color: Colors.blue,
           textColor: Colors.white,
         );

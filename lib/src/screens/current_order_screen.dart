@@ -85,7 +85,32 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                 margin: EdgeInsets.all(16.0),
                 child: RaisedButton(
                   onPressed: () {
-                    _repo.updateStatus(widget.orderId);
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context){
+                        return AlertDialog(
+                        title: Text('Service Completed ?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('No'),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                          ),
+                          FlatButton(
+                            child: Text('Confirm'),
+                            onPressed: (){
+                              _repo.updateStatus(widget.orderId);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                        );
+                      },
+                    );
+                    
                   },
                   textColor: Colors.white,
                   color: Colors.blue,
@@ -163,6 +188,7 @@ class UserDetailBuilder extends StatelessWidget {
               trailing: IconButton(
                 onPressed: () {
                   //_repo.updateStatus(widget.orderId);
+                  
                   launch(
                       'google.navigation:q=${snapshot.data.first.userAddress}');
                 },
