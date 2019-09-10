@@ -1,3 +1,4 @@
+import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,6 +28,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    userId = Constants.prefs.getString(Constants.firebase_user_id);
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
       if (user == null) {
         Navigator.pushNamed(context, '/l');
@@ -43,42 +45,39 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
     _messaging.configure(onMessage: (Map<String, dynamic> map) async {
       setState(() {
-        if(map['data']['id']=='1'){
+        if (map['data']['id'] == '1') {
           notifyWidget = ServiceNotifyWidget(
-            orderId: map['data']['orderId'], notifyParent: refresh);
-        }else if(map['data']['id']=='2'){ 
+              orderId: map['data']['orderId'], notifyParent: refresh);
+        } else if (map['data']['id'] == '2') {
           notifyWidget = NotifyWidget();
           statusText = 'assigned';
           statusColor = statusColors['assigned'];
           Navigator.pushNamed(context, '/c${map['data']['orderId']}');
         }
-        
       });
     }, onLaunch: (Map<String, dynamic> map) async {
       setState(() {
-        if(map['data']['id']=='1'){
+        if (map['data']['id'] == '1') {
           notifyWidget = ServiceNotifyWidget(
-            orderId: map['data']['orderId'], notifyParent: refresh);
-        }else if(map['data']['id']=='2'){ 
+              orderId: map['data']['orderId'], notifyParent: refresh);
+        } else if (map['data']['id'] == '2') {
           notifyWidget = NotifyWidget();
           statusText = 'assigned';
           statusColor = statusColors['assigned'];
           Navigator.pushNamed(context, '/c${map['data']['orderId']}');
         }
-        
       });
     }, onResume: (Map<String, dynamic> map) async {
       setState(() {
-        if(map['data']['id']=='1'){
+        if (map['data']['id'] == '1') {
           notifyWidget = ServiceNotifyWidget(
-            orderId: map['data']['orderId'], notifyParent: refresh);
-        }else if(map['data']['id']=='2'){ 
+              orderId: map['data']['orderId'], notifyParent: refresh);
+        } else if (map['data']['id'] == '2') {
           notifyWidget = NotifyWidget();
           statusText = 'assigned';
           statusColor = statusColors['assigned'];
           Navigator.pushNamed(context, '/c${map['data']['orderId']}');
         }
-        
       });
     });
 
@@ -148,10 +147,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   refresh(int temp) {
     setState(() {
-      if(temp==1) // Decline Button
-      notifyWidget = NotifyWidget();
-      else if(temp==0) // Accept Button
-      notifyWidget = AcceptNotifyWidget();
+      if (temp == 1) // Decline Button
+        notifyWidget = NotifyWidget();
+      else if (temp == 0) // Accept Button
+        notifyWidget = AcceptNotifyWidget();
     });
   }
 
@@ -443,8 +442,9 @@ class _ServiceNotifyWidgetState extends State<ServiceNotifyWidget> {
                       });
                 }),
             trailing: FlatButton(
-              onPressed: () async{
-                var result =await Navigator.pushNamed(context, '/n${widget.orderId}');
+              onPressed: () async {
+                var result =
+                    await Navigator.pushNamed(context, '/n${widget.orderId}');
                 print('result is $result');
                 widget.notifyParent(result);
               },

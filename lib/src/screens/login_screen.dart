@@ -1,3 +1,6 @@
+import 'package:dailypitpartner/src/screens/main_screen.dart';
+import 'package:dailypitpartner/src/utils/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../blocs/login_bloc.dart';
 import '../blocs/login_provider.dart';
@@ -35,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // user NOT logged
       }
     });
-    _googleSignIn.signInSilently().whenComplete(() => {});
+    //  _googleSignIn.signInSilently().whenComplete(() => {});
   }
 
   Future<void> _handleSignIn() async {
@@ -143,12 +146,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: MediaQuery.of(context).size.height / 5,
               ),
               Container(
-                alignment:Alignment.center,
+                alignment: Alignment.center,
                 margin: EdgeInsets.all(8.0),
-                child: Text('Want to provide services ? Join Us',
-                style: TextStyle(
-                  fontSize: 18.0,
-                ),),
+                child: Text(
+                  'Want to provide services ? Join Us',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                ),
               ),
               Container(child: registerButton(context)),
             ],
@@ -208,9 +213,19 @@ class _LoginScreenState extends State<LoginScreen> {
             onPressed: snapshot.hasData
                 ? () {
                     print('Test');
+                    showCupertinoDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          content: CupertinoActivityIndicator(),
+                        );
+                      },
+                    );
                     bloc.login().then((FirebaseUser user) {
                       print('${user.email}');
-
+                      Constants.prefs.setBool(Constants.pref_logged_in, true);
+                      Constants.prefs
+                          .setString(Constants.firebase_user_id, user.uid);
                       Firestore.instance
                           .collection('freelancer')
                           .where('emailid', isEqualTo: user.email)
@@ -227,6 +242,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             'token': token,
                           });
                           Navigator.pop(context);
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return MainScreen();
+                            },
+                          ));
                         });
                       });
                     }).catchError((e) {
@@ -257,10 +277,12 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Text('Register',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                  ),),
+        child: Text(
+          'Register',
+          style: TextStyle(
+            fontSize: 20.0,
+          ),
+        ),
       ),
       color: Colors.blue,
       textColor: Colors.white,

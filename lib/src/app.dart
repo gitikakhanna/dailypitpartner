@@ -1,4 +1,5 @@
 import 'package:dailypitpartner/src/screens/current_order_screen.dart';
+import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
 import 'blocs/login_provider.dart';
@@ -23,6 +24,9 @@ class _AppState extends State<App> {
         child: MaterialApp(
           title: 'Login form with BLOC',
           onGenerateRoute: routes,
+          home: Constants.prefs.getBool(Constants.pref_logged_in) == true
+              ? MainScreen()
+              : LoginScreen(),
         ),
       ),
     );
@@ -45,11 +49,10 @@ class _AppState extends State<App> {
       return MaterialPageRoute(builder: (context) {
         final id = settings.name.replaceFirst('/c', '');
         return CurrentOrderScreen(
-          orderId:id,
+          orderId: id,
         );
       });
-    }
-     else if (settings.name.contains('/n')) {
+    } else if (settings.name.contains('/n')) {
       return MaterialPageRoute(builder: (context) {
         final id = settings.name.replaceFirst('/n', '');
         return NewOrderScreen(
