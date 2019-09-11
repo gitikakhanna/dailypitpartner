@@ -97,15 +97,13 @@ class OrderDetailBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.only(top: 0,bottom: 16.0,right: 16.0,left: 16.0),
+      margin: EdgeInsets.only(top: 0, bottom: 16.0, right: 16.0, left: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(6.0)),
         color: Colors.white,
       ),
       child: StreamBuilder(
-        stream: Firestore.instance
-            .document('orders/$orderId')
-            .snapshots(),
+        stream: Firestore.instance.document('orders/$orderId').snapshots(),
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -120,11 +118,9 @@ class OrderDetailBuilder extends StatelessWidget {
             stream: Firestore.instance
                 .collection('subcategories')
                 .where('id',
-                    isEqualTo:
-                        int.parse(snapshot.data['subcategoryId']))
+                    isEqualTo: int.parse(snapshot.data['subcategoryId']))
                 .snapshots(),
-            builder: (context,
-                AsyncSnapshot<QuerySnapshot> orderSnapshot) {
+            builder: (context, AsyncSnapshot<QuerySnapshot> orderSnapshot) {
               if (!orderSnapshot.hasData) {
                 return ListTile(
                   title: Text('Loading'),
@@ -165,7 +161,7 @@ class UserDetailBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.only(top: 0,bottom: 16.0,right: 16.0,left: 16.0),
+      margin: EdgeInsets.only(top: 0, bottom: 16.0, right: 16.0, left: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(6.0)),
         color: Colors.white,
@@ -228,7 +224,9 @@ class DeclineButton extends StatelessWidget {
       width: double.infinity,
       child: RaisedButton(
         color: Colors.blue,
-        onPressed: () {Navigator.pop(context,1);},
+        onPressed: () {
+          Navigator.pop(context, 1);
+        },
         child: Text(
           'Decline',
           style: TextStyle(
@@ -252,7 +250,7 @@ class AcceptButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
+      margin: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
       width: double.infinity,
       child: RaisedButton(
         color: Colors.blue,
@@ -260,7 +258,7 @@ class AcceptButton extends StatelessWidget {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (context){
+            builder: (context) {
               return AlertDialog(
                 title: Center(
                   child: CircularProgressIndicator(),
@@ -275,7 +273,7 @@ class AcceptButton extends StatelessWidget {
             });
             print(user.uid);
             Navigator.pop(context);
-            Navigator.pop(context,0);
+            Navigator.pop(context, 0);
           });
         },
         child: Text(
