@@ -5,8 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'src/app.dart';
 
 void main() async {
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  // SystemChrome.setSystemUIOverlayStyle(
+  //     SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,

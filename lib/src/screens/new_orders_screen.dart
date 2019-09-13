@@ -1,3 +1,6 @@
+import 'package:dailypitpartner/src/models/my_order_model.dart';
+import 'package:dailypitpartner/src/resources/repository.dart';
+import 'package:dailypitpartner/src/utils/rounded_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,13 +77,61 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                   ),
                 ),
               ),
-              OrderDetailBuilder(orderId: orderId),
+              RoundedWidget(
+                marginTop: 0.0,
+                marginBottom: 8.0,
+                marginRight: 16.0,
+                marginLeft: 16.0,
+                color: Colors.white,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: new ServiceDetail(orderId: widget.orderId),
+                  ),
+                ),
+              ),
               AcceptButton(orderId: orderId),
               DeclineButton(),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class ServiceDetail extends StatelessWidget {
+  const ServiceDetail({Key key, this.orderId}) : super(key: key);
+  final String orderId;
+
+  @override
+  Widget build(BuildContext context) {
+    final _repo = Repository();
+    return FutureBuilder(
+      future: _repo.fetchNewSingleOrder(orderId),
+      builder: (context, AsyncSnapshot<List<MyOrderModel>> snapshot) {
+        if (!snapshot.hasData) {
+          return ListTile(
+            title: Text(
+              'Loading ...',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+          );
+        }
+        return ListTile(
+          trailing: Text(
+            '${snapshot.data.first.price}',
+            style: TextStyle(
+              fontSize: 16.0,
+            ),
+          ),
+          title: Text(
+            '${snapshot.data.first.subCategoryName}',
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+        );
+      },
     );
   }
 }
