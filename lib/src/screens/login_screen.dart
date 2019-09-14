@@ -223,34 +223,74 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                     bloc.login().then((FirebaseUser user) {
                       print('${user.email}');
-                      Constants.prefs.setBool(Constants.pref_logged_in, true);
-                      Constants.prefs
-                          .setString(Constants.firebase_user_id, user.uid);
-                      Firestore.instance
-                          .collection('freelancer')
-                          .where('emailid', isEqualTo: user.email)
-                          .getDocuments()
-                          .then((QuerySnapshot sn) {
-                        print('Document Id ${sn.documents.first.documentID}');
+                      if (user != null) {
+                        Constants.prefs.setBool(Constants.pref_logged_in, true);
+                        Constants.prefs
+                            .setString(Constants.firebase_user_id, user.uid);
+                        Firestore.instance
+                            .collection('freelancer')
+                            .where('emailid', isEqualTo: user.email)
+                            .getDocuments()
+                            .then((QuerySnapshot sn) {
+                          print('Document Id ${sn.documents.first.documentID}');
 
-                        _messaging.getToken().then((token) {
-                          Firestore.instance
-                              .document(
-                                  'freelancer/${sn.documents.first.documentID}')
-                              .updateData({
-                            'freelancerid': user.uid,
-                            'token': token,
+                          _messaging.getToken().then((token) {
+                            Firestore.instance
+                                .document(
+                                    'freelancer/${sn.documents.first.documentID}')
+                                .updateData({
+                              'freelancerid': user.uid,
+                              'token': token,
+                            });
+                            Navigator.pop(context);
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return MainScreen();
+                              },
+                            ));
                           });
-                          Navigator.pop(context);
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return MainScreen();
-                            },
-                          ));
                         });
-                      });
+                      } else {
+                        Navigator.pop(context);
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text('Error'),
+                              content:
+                                  Text('Username or password is incorrect'),
+                              actions: <Widget>[
+                                CupertinoButton(
+                                  child: Text('Ok'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     }).catchError((e) {
                       print('Error is $e');
+                      Navigator.pop(context);
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) {
+                          return CupertinoAlertDialog(
+                            title: Text('Error'),
+                            content: Text('Username or password is incorrect'),
+                            actions: <Widget>[
+                              CupertinoButton(
+                                child: Text('Ok'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     });
                   }
                 : null,

@@ -163,11 +163,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             height: 8.0,
           ),
           // Freelancer Detail
-          new FreelancerDetailWidget(
-            statusColor: statusColor,
-            statusText: statusText,
-            userId: userId,
-          ),
+          userId == '' || userId == null
+              ? Container()
+              : new FreelancerDetailWidget(
+                  statusColor: statusColor,
+                  statusText: statusText,
+                  userId: userId,
+                ),
           Container(
             //alignment: Alignment.center,
             margin: EdgeInsets.all(8.0),
