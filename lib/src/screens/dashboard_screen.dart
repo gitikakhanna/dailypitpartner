@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class DashBoardScreen extends StatefulWidget {
   DashBoardScreen({Key key}) : super(key: key);
@@ -44,6 +45,28 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     });
 
     _messaging.configure(onMessage: (Map<String, dynamic> map) async {
+      showOverlayNotification((context) {
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: SafeArea(
+            child: ListTile(
+              leading: SizedBox.fromSize(
+                  size: const Size(40, 40),
+                  child: ClipOval(
+                      child: Container(
+                    color: Colors.black,
+                  ))),
+              title: Text('FilledStacks'),
+              subtitle: Text('Thanks for checking out my tutorial'),
+              trailing: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    OverlaySupportEntry.of(context).dismiss();
+                  }),
+            ),
+          ),
+        );
+      }, duration: Duration(milliseconds: 10000));
       setState(() {
         if (map['data']['id'] == '1') {
           notifyWidget = ServiceNotifyWidget(
@@ -56,6 +79,28 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
       });
     }, onLaunch: (Map<String, dynamic> map) async {
+      showOverlayNotification((context) {
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: SafeArea(
+            child: ListTile(
+              leading: SizedBox.fromSize(
+                  size: const Size(40, 40),
+                  child: ClipOval(
+                      child: Container(
+                    color: Colors.black,
+                  ))),
+              title: Text('FilledStacks'),
+              subtitle: Text('Thanks for checking out my tutorial'),
+              trailing: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    OverlaySupportEntry.of(context).dismiss();
+                  }),
+            ),
+          ),
+        );
+      }, duration: Duration(milliseconds: 10000));
       setState(() {
         if (map['data']['id'] == '1') {
           notifyWidget = ServiceNotifyWidget(
@@ -68,6 +113,28 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         }
       });
     }, onResume: (Map<String, dynamic> map) async {
+      showOverlayNotification((context) {
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: SafeArea(
+            child: ListTile(
+              leading: SizedBox.fromSize(
+                  size: const Size(40, 40),
+                  child: ClipOval(
+                      child: Container(
+                    color: Colors.black,
+                  ))),
+              title: Text('FilledStacks'),
+              subtitle: Text('Thanks for checking out my tutorial'),
+              trailing: IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    OverlaySupportEntry.of(context).dismiss();
+                  }),
+            ),
+          ),
+        );
+      }, duration: Duration(milliseconds: 10000));
       setState(() {
         if (map['data']['id'] == '1') {
           notifyWidget = ServiceNotifyWidget(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dailypitpartner/src/models/freelance_model.dart';
 import 'package:dailypitpartner/src/models/my_order_model.dart';
 import 'package:dailypitpartner/src/models/order_model.dart';
 import 'package:http/http.dart';
@@ -73,5 +74,20 @@ class DailypitApiProvider {
     return (json.decode(response.body) as List).map((e) {
       return OrderModel.fromJson(e);
     }).toList();
+  }
+
+  Future<List<FreelancerModel>> fetchFreelancerDetail(String email) async {
+    try {
+      final response = await client.post(
+        '$_reusableRoot/get_freelancer_data.php',
+        body: {'email': email},
+      );
+      return (json.decode(response.body) as List).map((e) {
+        return FreelancerModel.fromJson(e);
+      }).toList();
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 }

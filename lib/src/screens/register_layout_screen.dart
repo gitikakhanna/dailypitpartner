@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../blocs/register_provider.dart';
 import '../blocs/register_bloc.dart';
@@ -148,25 +149,42 @@ class RegisterLayoutScreen extends StatelessWidget {
         return RaisedButton(
           onPressed: snapshot.hasData
               ? () {
-                  showDialog(
+                  showCupertinoDialog(
                     context: context,
-                    barrierDismissible: false,
                     builder: (context) {
-                      return AlertDialog(
+                      return CupertinoAlertDialog(
                         title: Text('Register your data ?'),
                         actions: <Widget>[
-                          FlatButton(
+                          CupertinoButton(
                             child: Text('No'),
                             onPressed: () {
                               Navigator.pop(context);
                             },
                           ),
-                          FlatButton(
+                          CupertinoButton(
                             child: Text('Confirm'),
                             onPressed: () {
                               bloc.registerDataValue();
                               Navigator.pop(context);
                               Navigator.pop(context);
+                              showCupertinoDialog(
+                                  context: context,
+                                  builder: (context) => CupertinoAlertDialog(
+                                        title: Text('Thank You'),
+                                        content: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                              'We have recieved your request . We will mail you the login password'),
+                                        ),
+                                        actions: <Widget>[
+                                          CupertinoButton(
+                                            child: Text('Ok'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      ));
                             },
                           ),
                         ],

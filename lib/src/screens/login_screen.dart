@@ -227,29 +227,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         Constants.prefs.setBool(Constants.pref_logged_in, true);
                         Constants.prefs
                             .setString(Constants.firebase_user_id, user.uid);
-                        Firestore.instance
-                            .collection('freelancer')
-                            .where('emailid', isEqualTo: user.email)
-                            .getDocuments()
-                            .then((QuerySnapshot sn) {
-                          print('Document Id ${sn.documents.first.documentID}');
-
-                          _messaging.getToken().then((token) {
-                            Firestore.instance
-                                .document(
-                                    'freelancer/${sn.documents.first.documentID}')
-                                .updateData({
-                              'freelancerid': user.uid,
-                              'token': token,
-                            });
-                            Navigator.pop(context);
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return MainScreen();
-                              },
-                            ));
-                          });
-                        });
+                        Constants.prefs.setString(
+                            Constants.firebasse_email_id, user.email);
+                        // This is for pop up
+                        Navigator.pop(context);
+                        // This is for screen
+                        Navigator.pop(context);
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return MainScreen();
+                          },
+                        ));
                       } else {
                         Navigator.pop(context);
                         showCupertinoDialog(

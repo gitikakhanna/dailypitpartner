@@ -1,3 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dailypitpartner/src/screens/new_dashboard_screen.dart';
+import 'package:dailypitpartner/src/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
@@ -5,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'test_order_screen.dart';
 import 'my_account_screen.dart';
+
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
 
@@ -12,12 +18,41 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _messaging = FirebaseMessaging();
+
   int _currentIndex = 0;
   final List<Widget> _children = [
-    DashBoardScreen(),
+    NewDashboardScreen(),
     MyOrderScreen(),
     MyAccountScreen(),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initMessagingToken();
+  }
+
+  initMessagingToken() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection('freelancer')
+        .where('emailid', isEqualTo: user.email)
+        .getDocuments()
+        .then((QuerySnapshot sn) {
+      print('Document Id ${sn.documents.first.documentID}');
+
+      _messaging.getToken().then((token) {
+        Firestore.instance
+            .document('freelancer/${sn.documents.first.documentID}')
+            .updateData({
+          'freelancerid': user.uid,
+          'token': token,
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
         title: Text('Dailypit Partner'),
         elevation: 0.0,
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.blueGrey[50],
       bottomNavigationBar: BottomNavigationBar(

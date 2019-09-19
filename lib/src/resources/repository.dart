@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dailypitpartner/src/models/freelance_model.dart';
 import 'package:dailypitpartner/src/models/my_order_model.dart';
 import 'package:dailypitpartner/src/models/order_model.dart';
 
@@ -26,5 +27,9 @@ class Repository {
 
   Future<List<OrderModel>> fetchMyOrders(String freelancerId) async {
     return await apiProvider.fetchMyOrders(freelancerId);
+  }
+
+  Future<List<FreelancerModel>> fetchFreelancerDetail(String email) async {
+    return await apiProvider.fetchFreelancerDetail(email);
   }
 }
