@@ -31,14 +31,73 @@ class _AppState extends State<App> {
   initFirebaseMessaging() {
     _messaging.configure(
       onMessage: (Map<String, dynamic> map) async {
-        showRequestNotification(map);
+        if (map['data']['id'] == '1')
+          showRequestNotification(map);
+        else if (map['data']['id'] == '2') showAssignedNotification(map);
       },
       onResume: (Map<String, dynamic> map) async {
-        showRequestNotification(map);
+        if (map['data']['id'] == '1')
+          showRequestNotification(map);
+        else if (map['data']['id'] == '2') showAssignedNotification(map);
       },
       onLaunch: (Map<String, dynamic> map) async {
-        showRequestNotification(map);
+        if (map['data']['id'] == '1')
+          showRequestNotification(map);
+        else if (map['data']['id'] == '2') showAssignedNotification(map);
       },
+    );
+  }
+
+  showAssignedNotification(Map<String, dynamic> map) {
+    showOverlayNotification(
+      (context) {
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: SafeArea(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: SizedBox.fromSize(
+                      size: const Size(40, 40),
+                      child: ClipOval(
+                          child: Container(
+                        color: Colors.black,
+                      ))),
+                  title: Text('Dailypit'),
+                  subtitle: Text('We have assigned you an order'),
+                  trailing: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      OverlaySupportEntry.of(context).dismiss();
+                    },
+                  ),
+                ),
+                ButtonBar(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    CupertinoButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CurrentOrderScreen(
+                                    orderId: map['data']['orderId'],
+                                  )),
+                        );
+                        OverlaySupportEntry.of(context).dismiss();
+                      },
+                      child: Text('View Details'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      duration: Duration(
+        milliseconds: 10000,
+      ),
     );
   }
 
@@ -60,23 +119,39 @@ class _AppState extends State<App> {
                   title: Text('Dailypit'),
                   subtitle: Text('There is a service Request for you'),
                   trailing: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        OverlaySupportEntry.of(context).dismiss();
-                      }),
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      OverlaySupportEntry.of(context).dismiss();
+                    },
+                  ),
                 ),
                 ButtonBar(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     CupertinoButton(
                       onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewOrderScreen(
+                                    orderId: map['data']['orderId'],
+                                  )),
+                        );
+                        OverlaySupportEntry.of(context).dismiss();
+                      },
+                      child: Text('View Details'),
+                    ),
+                    CupertinoButton(
+                      onPressed: () {
                         acceptRequest(map['data']['orderId']);
+                        OverlaySupportEntry.of(context).dismiss();
                       },
                       child: Text('Accept'),
                     ),
                     CupertinoButton(
                       onPressed: () {
                         toast('declined');
+                        OverlaySupportEntry.of(context).dismiss();
                       },
                       child: Text('Decline'),
                     ),

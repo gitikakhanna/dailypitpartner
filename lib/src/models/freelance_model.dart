@@ -52,7 +52,7 @@ class FreelancerModel {
     experience = json['experience'];
     servingLocation = json['serving_location'];
     qualification = json['qualification'];
-    image = json['image'];
+    image = 'https://dailypit.com/dailypitcrm/uploads/${json['image']}';
     doc = json['doc'];
   }
 
