@@ -65,6 +65,24 @@ class DailypitApiProvider {
     }
   }
 
+  Future<bool> updatePassword(String phoneNumber, String password) async {
+    final response = await client.post(
+      '$_reusableRoot/change_freelancer_password.php',
+      body: {
+        'phone': phoneNumber,
+        'password': password,
+      },
+    );
+    int res = int.parse(response.body);
+    assert(res is int);
+    //print('response is $res');
+    if (res == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<List<OrderModel>> fetchMyOrders(String freelancerId) async {
     final response = await client.post(
       '$_reusableRoot/get_assigned_orders.php',

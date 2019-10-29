@@ -14,6 +14,8 @@ class LoginBloc extends Object with LoginValidator {
     }
   }
 
+  FreelancerModel _freelancerModel;
+
   final _repository = Repository();
 
   final _emailController = new BehaviorSubject<String>();
@@ -51,12 +53,40 @@ class LoginBloc extends Object with LoginValidator {
     try {
       List<FreelancerModel> freelancers =
           await _repository.fetchFreelancerDetail(email);
+      _freelancerModel = freelancers.first;
       freelanceSink(freelancers.first);
     } catch (e) {
       freelanceSink(FreelancerModel(
         name: 'Error',
       ));
     }
+  }
+
+  Future<bool> reAuthenticate(String password) async {
+    try {
+      FirebaseUser user =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _freelancerModel.emailid,
+        password: _freelancerModel.password,
+      );
+      return updatePassword(user, password);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updatePassword(FirebaseUser user, String password) async {
+    bool isUpdated =
+        await _repository.updatePassword(password, _freelancerModel.phoneno);
+
+    if (isUpdated) {
+      user.updatePassword(password).then((_) {
+        print('Updated');
+      });
+      return true;
+    }
+
+    return false;
   }
 
   dispose() {

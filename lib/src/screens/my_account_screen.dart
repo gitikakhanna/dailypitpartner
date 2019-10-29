@@ -1,6 +1,9 @@
+import 'package:dailypitpartner/src/blocs/login_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class MyAccountScreen extends StatefulWidget {
   MyAccountScreen({Key key}) : super(key: key);
@@ -9,8 +12,11 @@ class MyAccountScreen extends StatefulWidget {
 }
 
 class _MyAccountScreenState extends State<MyAccountScreen> {
+  String newPassword;
+  String reenteredPassword;
   @override
   Widget build(BuildContext context) {
+    final bloc = LoginProvider.of(context);
     return Container(
       margin: EdgeInsets.all(8.0),
       color: Colors.white,
@@ -67,7 +73,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.edit),
-                      onPressed: (){
+                      onPressed: () {
                         print("Go to My Profile editable");
                       },
                     ),
@@ -111,12 +117,93 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
           ),
           Container(
             margin: EdgeInsets.all(8.0),
-            child: RaisedButton(
+            child: CupertinoButton(
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Change Password'),
+                      content: Column(
+                        children: <Widget>[
+                          TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                newPassword = value;
+                              });
+                            },
+                            obscureText: true,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              labelText: 'New Password',
+                              hintText: 'XXXX',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            onChanged: (value) {
+                              setState(() {
+                                reenteredPassword = value;
+                              });
+                            },
+                            obscureText: true,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              labelText: 'Re Enter Password',
+                              hintText: 'XXXX',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          onPressed: () async {
+                            print('$reenteredPassword');
+                            print('$newPassword');
+                            if (reenteredPassword.length != 0 &&
+                                reenteredPassword == newPassword) {
+                              bool result =
+                                  await bloc.reAuthenticate(reenteredPassword);
+                              if (result) {
+                                toast('Password Updated Successfully !!');
+                                FirebaseAuth.instance.signOut();
+                                Navigator.popAndPushNamed(context, '/l');
+                              } else {
+                                toast('Oops Something is Wrong');
+                              }
+                            } else {
+                              toast('Entered Password is not same');
+                            }
+                          },
+                          child: Text('Change'),
+                        ),
+                        FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Cancel'),
+                        ),
+                      ],
+                      contentPadding: EdgeInsets.all(8.0),
+                    );
+                  },
+                );
+              },
+              color: Colors.blue,
+              child: Text('Change Password'),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(8.0),
+            child: CupertinoButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
                 Navigator.popAndPushNamed(context, '/l');
               },
-              textColor: Colors.white,
               color: Colors.blue,
               child: Text('Sign Out'),
             ),
@@ -124,5 +211,15 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         ],
       ),
     );
+  }
+
+  reAuthenticate() async {
+    FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: 'shubham77seven@gmail.com',
+      password: 'DcOaVhyI',
+    );
+    user.updatePassword('dailypit12345').then((_) {
+      print('Updated');
+    });
   }
 }
