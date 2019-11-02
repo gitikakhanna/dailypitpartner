@@ -119,60 +119,73 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             margin: EdgeInsets.all(8.0),
             child: CupertinoButton(
               onPressed: () async {
-                showDialog(
+                showCupertinoDialog(
                   context: context,
                   builder: (context) {
-                    return AlertDialog(
+                    return CupertinoAlertDialog(
                       title: Text('Change Password'),
-                      content: Column(
-                        children: <Widget>[
-                          TextField(
-                            onChanged: (value) {
-                              setState(() {
-                                newPassword = value;
-                              });
-                            },
-                            obscureText: true,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              labelText: 'New Password',
-                              hintText: 'XXXX',
-                              border: OutlineInputBorder(),
+                      content: Material(
+                        color: Colors.transparent,
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextField(
-                            onChanged: (value) {
-                              setState(() {
-                                reenteredPassword = value;
-                              });
-                            },
-                            obscureText: true,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              labelText: 'Re Enter Password',
-                              hintText: 'XXXX',
-                              border: OutlineInputBorder(),
+                            TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  newPassword = value;
+                                });
+                              },
+                              obscureText: true,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                labelText: 'New Password',
+                                hintText: 'XXXX',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextField(
+                              onChanged: (value) {
+                                setState(() {
+                                  reenteredPassword = value;
+                                });
+                              },
+                              obscureText: true,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                labelText: 'Re Enter Password',
+                                hintText: 'XXXX',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       actions: <Widget>[
                         FlatButton(
                           onPressed: () async {
-                            print('$reenteredPassword');
-                            print('$newPassword');
                             if (reenteredPassword.length != 0 &&
                                 reenteredPassword == newPassword) {
-                              bool result =
-                                  await bloc.reAuthenticate(reenteredPassword);
+                              showCupertinoDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CupertinoAlertDialog(
+                                      content: CupertinoActivityIndicator());
+                                },
+                              );
+                              bool result = await LoginProvider.of(context)
+                                  .reAuthenticate(reenteredPassword);
                               if (result) {
+                                Navigator.pop(context);
                                 toast('Password Updated Successfully !!');
                                 FirebaseAuth.instance.signOut();
                                 Navigator.popAndPushNamed(context, '/l');
                               } else {
+                                Navigator.pop(context);
                                 toast('Oops Something is Wrong');
                               }
                             } else {
@@ -188,7 +201,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                           child: Text('Cancel'),
                         ),
                       ],
-                      contentPadding: EdgeInsets.all(8.0),
+                      //contentPadding: EdgeInsets.all(8.0),
                     );
                   },
                 );

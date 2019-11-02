@@ -5,8 +5,10 @@ import 'package:dailypitpartner/src/blocs/login_provider.dart';
 import 'package:dailypitpartner/src/models/freelance_model.dart';
 import 'package:dailypitpartner/src/screens/edit_profile_screen.dart';
 import 'package:dailypitpartner/src/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class NewDashboardScreen extends StatefulWidget {
   NewDashboardScreen({Key key}) : super(key: key);
@@ -33,8 +35,8 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
                 child: Text('Something is Wrong'),
               );
             } else {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              return ListView(
+                //crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   FreelancerProfileCard(
                     freelancer: snapshot.data,
@@ -61,7 +63,8 @@ class FreelancerProfileCard extends StatefulWidget {
 class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
   List<Color> statusColors;
   List<String> statusNames;
-
+  String newPassword;
+  String reenteredPassword;
   String _currentName;
   Color _currentColor;
   @override
@@ -201,83 +204,232 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
           SizedBox(
             height: 20,
           ),
-          Card(
-            elevation: 12.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  changeStatus();
-                },
-                borderRadius: BorderRadius.circular(20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blue[300],
-                        Colors.blue,
-                      ],
-                    ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Card(
+                  elevation: 12.0,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text(
-                      'Change Status',
-                      style: TextStyle(
-                        color: Colors.white,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        changeStatus();
+                      },
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue[300],
+                              Colors.blue,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'Change Status',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-          SizedBox(
-            height: 20,
-          ),
-          Card(
-            elevation: 12.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return EditProfileScreen(
-                      freelancer: widget.freelancer,
-                      loginBloc: LoginProvider.of(context),
-                    );
-                  }));
-                },
-                borderRadius: BorderRadius.circular(20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blue[300],
-                        Colors.blue,
-                      ],
-                    ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Card(
+                  elevation: 12.0,
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text(
-                      'Change Status',
-                      style: TextStyle(
-                        color: Colors.white,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return EditProfileScreen(
+                            freelancer: widget.freelancer,
+                            loginBloc: LoginProvider.of(context),
+                          );
+                        }));
+                      },
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue[200],
+                              Colors.blue[400],
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'Update Profile',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Card(
+                  elevation: 12.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () async {
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text('Change Password'),
+                              content: Material(
+                                color: Colors.transparent,
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    TextField(
+                                      onChanged: (value) {
+                                        setState(() {
+                                          newPassword = value;
+                                        });
+                                      },
+                                      obscureText: true,
+                                      keyboardType: TextInputType.text,
+                                      decoration: InputDecoration(
+                                        labelText: 'New Password',
+                                        hintText: 'XXXX',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    TextField(
+                                      onChanged: (value) {
+                                        setState(() {
+                                          reenteredPassword = value;
+                                        });
+                                      },
+                                      obscureText: true,
+                                      keyboardType: TextInputType.text,
+                                      decoration: InputDecoration(
+                                        labelText: 'Re Enter Password',
+                                        hintText: 'XXXX',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  onPressed: () async {
+                                    if (reenteredPassword.length != 0 &&
+                                        reenteredPassword == newPassword) {
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CupertinoAlertDialog(
+                                              content:
+                                                  CupertinoActivityIndicator());
+                                        },
+                                      );
+                                      bool result = await LoginProvider.of(
+                                              context)
+                                          .reAuthenticate(reenteredPassword);
+                                      if (result) {
+                                        Navigator.pop(context);
+                                        toast(
+                                            'Password Updated Successfully !!');
+                                        FirebaseAuth.instance.signOut();
+                                        Navigator.popAndPushNamed(
+                                            context, '/l');
+                                      } else {
+                                        Navigator.pop(context);
+                                        toast('Oops Something is Wrong');
+                                      }
+                                    } else {
+                                      toast('Entered Password is not same');
+                                    }
+                                  },
+                                  child: Text('Change'),
+                                ),
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                              //contentPadding: EdgeInsets.all(8.0),
+                            );
+                          },
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue[50],
+                              Colors.blue[300],
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'Change Password',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

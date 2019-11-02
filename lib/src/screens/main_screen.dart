@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dailypit Partner'),
-        elevation: 0.0,
+        elevation: 2.0,
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
