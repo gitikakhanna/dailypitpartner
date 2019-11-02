@@ -16,6 +16,8 @@ class LoginBloc extends Object with LoginValidator {
 
   FreelancerModel _freelancerModel;
 
+  FreelancerModel editFreelancerObject;
+
   final _repository = Repository();
 
   final _emailController = new BehaviorSubject<String>();

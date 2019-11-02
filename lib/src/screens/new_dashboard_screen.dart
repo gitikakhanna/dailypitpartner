@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dailypitpartner/src/blocs/login_bloc.dart';
 import 'package:dailypitpartner/src/blocs/login_provider.dart';
 import 'package:dailypitpartner/src/models/freelance_model.dart';
+import 'package:dailypitpartner/src/screens/edit_profile_screen.dart';
 import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +113,23 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
     );
   }
 
+  changeStatus() {
+    showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+              content: CupertinoActivityIndicator(),
+            ));
+    Firestore.instance
+        .collection('freelancer')
+        .where('freelancerid',
+            isEqualTo: Constants.prefs.getString(Constants.firebase_user_id))
+        .getDocuments()
+        .then((QuerySnapshot sn) {
+      Navigator.pop(context);
+      onStatusChangeTap(sn.documents.first.documentID);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -192,21 +210,50 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                            content: CupertinoActivityIndicator(),
-                          ));
-                  Firestore.instance
-                      .collection('freelancer')
-                      .where('freelancerid',
-                          isEqualTo: Constants.prefs
-                              .getString(Constants.firebase_user_id))
-                      .getDocuments()
-                      .then((QuerySnapshot sn) {
-                    Navigator.pop(context);
-                    onStatusChangeTap(sn.documents.first.documentID);
-                  });
+                  changeStatus();
+                },
+                borderRadius: BorderRadius.circular(20.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.blue[300],
+                        Colors.blue,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      'Change Status',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Card(
+            elevation: 12.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return EditProfileScreen(
+                      freelancer: widget.freelancer,
+                      loginBloc: LoginProvider.of(context),
+                    );
+                  }));
                 },
                 borderRadius: BorderRadius.circular(20.0),
                 child: Container(
