@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dailypitpartner/src/screens/current_order_screen.dart';
-import 'package:dailypitpartner/src/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'screens/login_screen.dart';
+
 import 'blocs/login_provider.dart';
-import 'screens/register_layout_screen.dart';
-import 'screens/new_orders_screen.dart';
-import 'screens/dashboard_screen.dart';
-import 'screens/main_screen.dart';
 import 'blocs/register_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'screens/current_order_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/main_screen.dart';
+import 'screens/new_orders_screen.dart';
+import 'screens/register_layout_screen.dart';
+import 'utils/constants.dart';
 
 class App extends StatefulWidget {
   @override

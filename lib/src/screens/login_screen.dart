@@ -137,7 +137,10 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 8.0,
               ),
-              passwordField(bloc),
+              PasswordWidget(
+                loginBloc: bloc,
+              ),
+              //passwordField(bloc),
               Container(
                 margin: EdgeInsets.only(top: 32.0),
               ),
@@ -320,5 +323,55 @@ class _LoginScreenState extends State<LoginScreen> {
   Future navigateToRegister(BuildContext context) async {
     Navigator.push(
         context, new MaterialPageRoute(builder: (context) => RegisterScreen()));
+  }
+}
+
+class PasswordWidget extends StatefulWidget {
+  final LoginBloc loginBloc;
+  PasswordWidget({Key key, this.loginBloc}) : super(key: key);
+
+  @override
+  _PasswordWidgetState createState() => _PasswordWidgetState();
+}
+
+class _PasswordWidgetState extends State<PasswordWidget> {
+  bool isVisible;
+
+  @override
+  void initState() {
+    super.initState();
+    isVisible = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: widget.loginBloc.password,
+      builder: (context, snapshot) {
+        return TextField(
+          onChanged: widget.loginBloc.changePassword,
+          obscureText: isVisible,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              icon: Icon(
+                // Based on passwordVisible state choose the icon
+                isVisible ? Icons.visibility : Icons.visibility_off,
+                color: Theme.of(context).primaryColorDark,
+              ),
+              onPressed: () {
+                // Update the state i.e. toogle the state of passwordVisible variable
+                setState(() {
+                  isVisible = !isVisible;
+                });
+              },
+            ),
+            labelText: 'Password',
+            hintText: 'enter password',
+            errorText: snapshot.error,
+            border: OutlineInputBorder(),
+          ),
+        );
+      },
+    );
   }
 }
