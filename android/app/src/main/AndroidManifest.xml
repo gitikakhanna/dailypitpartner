@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dailypitpartner">
+    package="com.dailypit.dailypitpartner">
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -12,7 +12,7 @@
     
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="dailypitpartner"
+        android:label="Dailypit Partner"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

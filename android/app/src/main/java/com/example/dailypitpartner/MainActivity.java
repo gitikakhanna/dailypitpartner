@@ -1,4 +1,4 @@
-package com.example.dailypitpartner;
+package com.dailypit.dailypitpartner;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

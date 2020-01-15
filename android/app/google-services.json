@@ -8,12 +8,134 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:576098212055:android:cf464357d08c8203993892",
+        "android_client_info": {
+          "package_name": "com.dailypit.dailypitpartner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576098212055-i206ma4fjoffqi275khsk2qfa90f9suq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4YIsp3ciMmRq2l_tDWQwtH_AnGSRt0q4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576098212055-i206ma4fjoffqi275khsk2qfa90f9suq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576098212055:android:d65287c09ddbeee7993892",
+        "android_client_info": {
+          "package_name": "com.dailypit.dp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576098212055-h8m37sse4bge41k1ie07f0df9jgpk69l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dailypit.dp",
+            "certificate_hash": "f603a53025ba7491a8665a25431d16c086acff32"
+          }
+        },
+        {
+          "client_id": "576098212055-pn5sakfiv28q7q14mdi5cggt12ksv4n2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dailypit.dp",
+            "certificate_hash": "c8dca57eba0f438fc48d4861df936966b01368f6"
+          }
+        },
+        {
+          "client_id": "576098212055-f7q0a9emejeqrchgbhq810vs66o35in1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dailypit.dp",
+            "certificate_hash": "2cae166566bfca09357daddf6705fe0cc9dcf4a7"
+          }
+        },
+        {
+          "client_id": "576098212055-l3u6tk40r18efblcbahaonn8ljsevj87.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dailypit.dp",
+            "certificate_hash": "25a1c0b2b6d153350ebf8330b4068d5f3e1431f1"
+          }
+        },
+        {
+          "client_id": "576098212055-b9cjd6ghq4i2o83lf07860gop89dtrqv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dailypit.dp",
+            "certificate_hash": "a5912486e5a61ad49be71d035e620353b0fc3cf1"
+          }
+        },
+        {
+          "client_id": "576098212055-i206ma4fjoffqi275khsk2qfa90f9suq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4YIsp3ciMmRq2l_tDWQwtH_AnGSRt0q4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576098212055-i206ma4fjoffqi275khsk2qfa90f9suq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:576098212055:android:f3ee3347a5f95dbf",
         "android_client_info": {
           "package_name": "com.example.dailypit"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "576098212055-1g8gu03dlm7655igu2r10pr26e6i6n1g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dailypit",
+            "certificate_hash": "c8dca57eba0f438fc48d4861df936966b01368f6"
+          }
+        },
+        {
+          "client_id": "576098212055-qu17oaifiahfcl8j47seoabgj9fdgtr8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dailypit",
+            "certificate_hash": "2cae166566bfca09357daddf6705fe0cc9dcf4a7"
+          }
+        },
+        {
+          "client_id": "576098212055-u46vh73tus1lv834d4m21r7fntctipae.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dailypit",
+            "certificate_hash": "25a1c0b2b6d153350ebf8330b4068d5f3e1431f1"
+          }
+        },
         {
           "client_id": "576098212055-jhpbe12a1sfj0upsgpl6ed4mai56d41v.apps.googleusercontent.com",
           "client_type": 1,
