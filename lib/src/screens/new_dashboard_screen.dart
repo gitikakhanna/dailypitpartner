@@ -3,11 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dailypitpartner/src/blocs/login_bloc.dart';
 import 'package:dailypitpartner/src/blocs/login_provider.dart';
 import 'package:dailypitpartner/src/models/freelance_model.dart';
+import 'package:dailypitpartner/src/order_status/index.dart';
 import 'package:dailypitpartner/src/screens/edit_profile_screen.dart';
 import 'package:dailypitpartner/src/utils/constants.dart';
+import 'package:dailypitpartner/src/utils/info_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class NewDashboardScreen extends StatefulWidget {
@@ -17,6 +20,12 @@ class NewDashboardScreen extends StatefulWidget {
 }
 
 class _NewDashboardScreenState extends State<NewDashboardScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = LoginProvider.of(context);
@@ -74,6 +83,7 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
     statusNames = ['Online', 'Offline'];
     _currentColor = statusColors.elementAt(0);
     _currentName = statusNames.elementAt(0);
+    OrderStatusBloc().dispatch(LoadOrderStatusEvent());
   }
 
   onStatusChangeTap(String docId) {
@@ -142,7 +152,7 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Card(
-            elevation: 12.0,
+            elevation: 2.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),
@@ -200,6 +210,70 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                 ],
               ),
             ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: BlocBuilder<OrderStatusEvent, OrderStatusState>(
+                  bloc: OrderStatusBloc(),
+                  builder: (context, OrderStatusState currentState) {
+                    if (currentState is InOrderStatusState)
+                      return Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          InfoCard(
+                            margin: EdgeInsets.only(
+                                left: 8, right: 2, top: 2, bottom: 2),
+                            color: Colors.blue[300],
+                            info:
+                                '${currentState.orderStatusResponse.assignedCount}',
+                            title: 'Orders Assigned',
+                          ),
+                          InfoCard(
+                            margin: EdgeInsets.only(
+                                left: 2, right: 8, top: 2, bottom: 2),
+                            info:
+                                '${currentState.orderStatusResponse.completedCount}',
+                            title: 'Orders Completed',
+                            color: Colors.greenAccent,
+                          ),
+                        ],
+                      );
+
+                    if (currentState is NoOrderStatusState) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          InfoCard(
+                            margin: EdgeInsets.only(
+                                left: 8, right: 2, top: 2, bottom: 2),
+                            color: Colors.blue[300],
+                            info:
+                                '${currentState.orderStatusResponse.assignedCount}',
+                            title: 'Orders Assigned',
+                          ),
+                          InfoCard(
+                            margin: EdgeInsets.only(
+                                left: 2, right: 8, top: 2, bottom: 2),
+                            info:
+                                '${currentState.orderStatusResponse.completedCount}',
+                            title: 'Orders Completed',
+                            color: Colors.greenAccent,
+                          ),
+                        ],
+                      );
+                    }
+
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
+              ),
+            ],
           ),
           SizedBox(
             height: 20,

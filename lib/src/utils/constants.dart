@@ -1,6 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Constants {
+  static const String baseUrl = "http://dailypit.com/crmscripts";
+
   static SharedPreferences prefs;
 
   static const String pref_logged_in = "loggedIn";
