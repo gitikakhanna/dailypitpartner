@@ -222,32 +222,53 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                   bloc: TargetBloc(),
                   builder: (context, TargetState currentState) {
                     if (currentState is InCompletedTargetState) {
-                      return CircularPercentIndicator(
-                        radius: 120.0,
-                        lineWidth: 13.0,
-                        animation: true,
-                        percent: (currentState.targetResponse.achievedvalue) /
-                            (currentState.targetResponse.targetvalue),
-                        center: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('${currentState.targetResponse.achievedvalue}',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
-                            Text('/${currentState.targetResponse.targetvalue}',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        footer: new Text(
-                          "Target to Achieve",
-                          style: new TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17.0),
-                        ),
-                        circularStrokeCap: CircularStrokeCap.round,
-                        progressColor: Colors.purple,
+                      return Column(
+                        children: <Widget>[
+                          CircularPercentIndicator(
+                            radius: 120.0,
+                            lineWidth: 13.0,
+                            animation: true,
+                            percent:
+                                (currentState.targetResponse.achievedvalue) /
+                                    (currentState.targetResponse.targetvalue),
+                            center: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                    '${currentState.targetResponse.achievedvalue}',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                Text(
+                                    '/${currentState.targetResponse.targetvalue}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            footer: new Text(
+                              "Target to Achieve",
+                              style: new TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17.0),
+                            ),
+                            circularStrokeCap: CircularStrokeCap.round,
+                            progressColor: Colors.purple,
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(12),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: CachedNetworkImage(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.25,
+                                  fit: BoxFit.fill,
+                                  imageUrl:
+                                      "http://dailypit.com/images/targetinitial.jfif"),
+                            ),
+                          ),
+                        ],
                       );
                     }
 
@@ -295,7 +316,7 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                                       MediaQuery.of(context).size.height * 0.25,
                                   fit: BoxFit.fill,
                                   imageUrl:
-                                      "http://dailypit.com/images/target.jfif"),
+                                      "http://dailypit.com/images/target.jpeg"),
                             ),
                           ),
                         ],
