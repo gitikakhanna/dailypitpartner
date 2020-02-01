@@ -28,6 +28,8 @@ dependencies:
   flutter_bloc: ^0.15.0
   bloc: ^0.14.1
   equatable: ^0.2.5
+  percent_indicator: ^2.1.1+1
+  pk_skeleton: ^0.0.2
 
   # google_maps_flutter: ^0.0.3
   # flutter_google_places: ^0.1.4

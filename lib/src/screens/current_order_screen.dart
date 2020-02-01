@@ -1,4 +1,5 @@
 import 'package:dailypitpartner/src/models/order_model.dart';
+import 'package:dailypitpartner/src/target/index.dart';
 import 'package:flutter/material.dart';
 import '../resources/repository.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -81,48 +82,48 @@ class _CurrentOrderScreenState extends State<CurrentOrderScreen> {
                     color: Colors.white,
                   ),
                   child: OrderDetailBuilder(repo: _repo, widget: widget)),
-              Container(
-                margin: EdgeInsets.all(16.0),
-                child: RaisedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context){
-                        return AlertDialog(
-                        title: Text('Service Completed ?'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('No'),
-                            onPressed: (){
-                              Navigator.pop(context);
-                            },
-                          ),
-                          FlatButton(
-                            child: Text('Confirm'),
-                            onPressed: (){
-                              _repo.updateStatus(widget.orderId);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                        );
-                      },
-                    );
-                    
-                  },
-                  textColor: Colors.white,
-                  color: Colors.blue,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Completed',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-              ),
+              // Container(
+              //   margin: EdgeInsets.all(16.0),
+              //   child: RaisedButton(
+              //     onPressed: () {
+              //       showDialog(
+              //         context: context,
+              //         barrierDismissible: false,
+              //         builder: (context) {
+              //           return AlertDialog(
+              //             title: Text('Service Completed ?'),
+              //             actions: <Widget>[
+              //               FlatButton(
+              //                 child: Text('No'),
+              //                 onPressed: () {
+              //                   Navigator.pop(context);
+              //                 },
+              //               ),
+              //               FlatButton(
+              //                 child: Text('Confirm'),
+              //                 onPressed: () {
+              //                   //_repo.updateStatus(widget.orderId);
+              //                   TargetBloc().dispatch(UpdateTargetEvent());
+              //                   Navigator.pop(context);
+              //                   Navigator.pop(context);
+              //                 },
+              //               ),
+              //             ],
+              //           );
+              //         },
+              //       );
+              //     },
+              //     textColor: Colors.white,
+              //     color: Colors.blue,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(16.0),
+              //       child: Text(
+              //         'Completed',
+              //         style: TextStyle(fontSize: 20),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -188,7 +189,7 @@ class UserDetailBuilder extends StatelessWidget {
               trailing: IconButton(
                 onPressed: () {
                   //_repo.updateStatus(widget.orderId);
-                  
+
                   launch(
                       'google.navigation:q=${snapshot.data.first.userAddress}');
                 },
@@ -260,6 +261,55 @@ class OrderDetailBuilder extends StatelessWidget {
                   overflow: TextOverflow.fade,
                 ),
               ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: RaisedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Service Completed ?'),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('No'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Confirm'),
+                                onPressed: () {
+                                  _repo.updateStatus(widget.orderId);
+                                  TargetBloc().dispatch(UpdateTargetEvent(
+                                      value: '${snapshot.data.first.price}'));
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    textColor: Colors.white,
+                    color: Colors.blue,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        'Completed',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         );

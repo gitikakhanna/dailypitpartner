@@ -249,6 +249,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0+1"
+  percent_indicator:
+    dependency: "direct main"
+    description:
+      name: percent_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1+1"
   petitparser:
     dependency: transitive
     description:
@@ -256,6 +263,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  pk_skeleton:
+    dependency: "direct main"
+    description:
+      name: pk_skeleton
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2"
   platform:
     dependency: transitive
     description:

@@ -5,6 +5,7 @@ import 'package:dailypitpartner/src/blocs/login_provider.dart';
 import 'package:dailypitpartner/src/models/freelance_model.dart';
 import 'package:dailypitpartner/src/order_status/index.dart';
 import 'package:dailypitpartner/src/screens/edit_profile_screen.dart';
+import 'package:dailypitpartner/src/target/index.dart';
 import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:dailypitpartner/src/utils/info_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:pk_skeleton/pk_skeleton.dart';
 
 class NewDashboardScreen extends StatefulWidget {
   NewDashboardScreen({Key key}) : super(key: key);
@@ -84,6 +87,7 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
     _currentColor = statusColors.elementAt(0);
     _currentName = statusNames.elementAt(0);
     OrderStatusBloc().dispatch(LoadOrderStatusEvent());
+    TargetBloc().dispatch(LoadTargetEvent());
   }
 
   onStatusChangeTap(String docId) {
@@ -211,6 +215,102 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
               ),
             ),
           ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: BlocBuilder<TargetEvent, TargetState>(
+                  bloc: TargetBloc(),
+                  builder: (context, TargetState currentState) {
+                    if (currentState is InCompletedTargetState) {
+                      return CircularPercentIndicator(
+                        radius: 120.0,
+                        lineWidth: 13.0,
+                        animation: true,
+                        percent: (currentState.targetResponse.achievedvalue) /
+                            (currentState.targetResponse.targetvalue),
+                        center: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('${currentState.targetResponse.achievedvalue}',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text('/${currentState.targetResponse.targetvalue}',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        footer: new Text(
+                          "Target to Achieve",
+                          style: new TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 17.0),
+                        ),
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: Colors.purple,
+                      );
+                    }
+
+                    if (currentState is CompletedTargetState) {
+                      return Column(
+                        children: <Widget>[
+                          CircularPercentIndicator(
+                            radius: 120.0,
+                            lineWidth: 13.0,
+                            animation: true,
+                            percent:
+                                (currentState.targetResponse.achievedvalue) /
+                                    (currentState.targetResponse.targetvalue),
+                            center: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                    '${currentState.targetResponse.achievedvalue}',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                Text(
+                                    '/${currentState.targetResponse.targetvalue}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            footer: new Text(
+                              "Target Achieved",
+                              style: new TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17.0),
+                            ),
+                            circularStrokeCap: CircularStrokeCap.round,
+                            progressColor: Colors.purple,
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(12),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: CachedNetworkImage(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.25,
+                                  fit: BoxFit.fill,
+                                  imageUrl:
+                                      "http://dailypit.com/images/target.jfif"),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    return Center(
+                        child: PKCardPageSkeleton(
+                      totalLines: 2,
+                    ));
+                  },
+                ),
+              ),
+            ],
+          ),
           SizedBox(
             height: 20,
           ),
@@ -269,14 +369,17 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                       );
                     }
 
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                        child: PKCardPageSkeleton(
+                      totalLines: 2,
+                    ));
                   },
                 ),
               ),
             ],
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Row(
             children: <Widget>[

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dailypitpartner/src/order_status/index.dart';
 import 'package:dailypitpartner/src/screens/new_dashboard_screen.dart';
+import 'package:dailypitpartner/src/target/index.dart';
 import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -67,6 +69,9 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
+          OrderStatusBloc().dispatch(LoadOrderStatusEvent());
+          TargetBloc().dispatch(LoadTargetEvent());
+
           setState(() {
             _currentIndex = index;
           });
