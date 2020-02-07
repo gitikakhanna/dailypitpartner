@@ -33,6 +33,16 @@ class _NewDashboardScreenState extends State<NewDashboardScreen> {
   Widget build(BuildContext context) {
     final bloc = LoginProvider.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Dailypit Partner',
+          style: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: StreamBuilder(
         stream: bloc.freelanceStream,
         builder:
