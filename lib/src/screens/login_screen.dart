@@ -1,17 +1,14 @@
-import 'package:dailypitpartner/src/screens/main_screen.dart';
-import 'package:dailypitpartner/src/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import '../blocs/login_bloc.dart';
 import '../blocs/login_provider.dart';
+import '../utils/constants.dart';
+import 'main_screen.dart';
 import 'register_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-// Use these to save data in the firestore
-import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:google_sign_in/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -124,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   'Dailypit Partner',
                   style: TextStyle(
-                    color: Colors.blue[600],
+                    color: Color(0xff0e94c4),
                     fontWeight: FontWeight.bold,
                     fontSize: 24.0,
                   ),
@@ -146,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               submitButton(bloc),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 5,
+                height: MediaQuery.of(context).size.height / 12,
               ),
               Container(
                 alignment: Alignment.center,
