@@ -1,4 +1,5 @@
 import 'package:dailypitpartner/src/blocs/login_provider.dart';
+import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -183,6 +184,8 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                                 Navigator.pop(context);
                                 toast('Password Updated Successfully !!');
                                 FirebaseAuth.instance.signOut();
+                                Constants.prefs
+                                    .setBool(Constants.pref_logged_in, false);
                                 Navigator.popAndPushNamed(context, '/l');
                               } else {
                                 Navigator.pop(context);
@@ -215,6 +218,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             child: CupertinoButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
+                Constants.prefs.setBool(Constants.pref_logged_in, false);
                 Navigator.popAndPushNamed(context, '/l');
               },
               color: Colors.blue,
@@ -224,15 +228,5 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         ],
       ),
     );
-  }
-
-  reAuthenticate() async {
-    FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: 'shubham77seven@gmail.com',
-      password: 'DcOaVhyI',
-    );
-    user.updatePassword('dailypit12345').then((_) {
-      print('Updated');
-    });
   }
 }
