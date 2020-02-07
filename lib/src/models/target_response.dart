@@ -15,7 +15,7 @@ class TargetResponse {
       this.isCompleted});
 
   TargetResponse.fromJson(Map<String, dynamic> json) {
-    id = int.parse(json['id']);
+    id = json['id'] == null ? 0 : int.parse(json['id']);
     userid = json['userid'];
     achievedvalue =
         json['achievedvalue'] == null ? 0 : int.parse(json['achievedvalue']);

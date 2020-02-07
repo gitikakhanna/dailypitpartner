@@ -215,6 +215,9 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
               ),
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: <Widget>[
               Expanded(
@@ -320,6 +323,19 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                             ),
                           ),
                         ],
+                      );
+                    }
+
+                    if (currentState is NoTargetState) {
+                      return Center(
+                        child: Text(
+                          "No Target available",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        ),
                       );
                     }
 

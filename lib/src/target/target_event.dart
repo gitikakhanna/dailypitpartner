@@ -18,10 +18,14 @@ class LoadTargetEvent extends TargetEvent {
       {TargetState currentState, TargetBloc bloc}) async {
     try {
       TargetResponse res = await _targetRepository.getPartnerTarget();
-      if (res.isCompleted) {
-        return CompletedTargetState(targetResponse: res);
+      if (res.id != 0) {
+        if (res.isCompleted) {
+          return CompletedTargetState(targetResponse: res);
+        } else {
+          return InCompletedTargetState(targetResponse: res);
+        }
       } else {
-        return InCompletedTargetState(targetResponse: res);
+        return NoTargetState();
       }
     } catch (e) {
       return ErrorTargetState(errorMessage: e.toString());

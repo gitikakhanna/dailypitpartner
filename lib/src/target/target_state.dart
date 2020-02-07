@@ -34,6 +34,18 @@ class LoadingTargetState extends TargetState {
   }
 }
 
+class NoTargetState extends TargetState {
+  @override
+  String toString() {
+    return "NoTargetState";
+  }
+
+  @override
+  TargetState getStateCopy() {
+    return NoTargetState();
+  }
+}
+
 class ErrorTargetState extends TargetState {
   final String errorMessage;
 

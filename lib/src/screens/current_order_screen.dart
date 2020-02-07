@@ -265,52 +265,55 @@ class OrderDetailBuilder extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: RaisedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('Service Completed ?'),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('No'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              FlatButton(
-                                child: Text('Confirm'),
-                                onPressed: () {
-                                  _repo.updateStatus(widget.orderId);
-                                  TargetBloc().dispatch(UpdateTargetEvent(
-                                      value: '${snapshot.data.first.price}'));
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    textColor: Colors.white,
-                    color: Colors.blue,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        'Completed',
-                        style: TextStyle(fontSize: 20),
+            snapshot.data.first.status.toLowerCase() == "completed"
+                ? Offstage()
+                : Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: RaisedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Service Completed ?'),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('No'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text('Confirm'),
+                                      onPressed: () {
+                                        _repo.updateStatus(widget.orderId);
+                                        TargetBloc().dispatch(UpdateTargetEvent(
+                                            value:
+                                                '${snapshot.data.first.price}'));
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          textColor: Colors.white,
+                          color: Colors.blue,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              'Completed',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ],
         );
       },
