@@ -20,7 +20,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('My Orders'),
-          centerTitle: true,
           bottom: TabBar(
             tabs: [
               Tab(
@@ -112,10 +111,11 @@ class TabOrderWidget extends StatelessWidget {
                               subtitle: Text('${myOrder.price}'),
                               trailing: Text('${myOrder.status}'),
                               onTap: () {
-                                if (myOrder.status.toString().toLowerCase() ==
-                                    'assigned') {
-                                      Navigator.pushNamed(context, '/c${myOrder.orderId}');
-                                    }
+                                //if (myOrder.status.toString().toLowerCase() ==
+                                //'assigned') {
+                                Navigator.pushNamed(
+                                    context, '/c${myOrder.orderId}');
+                                //}
                               }),
                         );
                 },

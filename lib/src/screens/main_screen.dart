@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dailypitpartner/src/screens/new_dashboard_screen.dart';
-import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_messaging/firebase_messaging.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
-import 'dashboard_screen.dart';
-import 'test_order_screen.dart';
+
+import '../order_status/index.dart';
+import '../target/index.dart';
 import 'my_account_screen.dart';
+import 'new_dashboard_screen.dart';
+import 'test_order_screen.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
@@ -57,16 +55,19 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dailypit Partner'),
-        elevation: 2.0,
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
+      // appBar: AppBar(
+      //   title: Text('Dailypit Partner'),
+      //   elevation: 2.0,
+      //   centerTitle: true,
+      //   automaticallyImplyLeading: false,
+      // ),
       backgroundColor: Colors.blueGrey[50],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
+          OrderStatusBloc().dispatch(LoadOrderStatusEvent());
+          TargetBloc().dispatch(LoadTargetEvent());
+
           setState(() {
             _currentIndex = index;
           });

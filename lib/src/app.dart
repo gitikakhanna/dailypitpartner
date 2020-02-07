@@ -186,6 +186,7 @@ class _AppState extends State<App> {
           child: MaterialApp(
             title: 'Login form with BLOC',
             onGenerateRoute: routes,
+            debugShowCheckedModeBanner: false,
             home: Constants.prefs.getBool(Constants.pref_logged_in) == true
                 ? MainScreen()
                 : LoginScreen(),

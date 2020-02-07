@@ -56,6 +56,7 @@ class LoginBloc extends Object with LoginValidator {
       List<FreelancerModel> freelancers =
           await _repository.fetchFreelancerDetail(email);
       _freelancerModel = freelancers.first;
+      Constants.prefs.setString(Constants.sql_user_id, _freelancerModel.id);
       freelanceSink(freelancers.first);
     } catch (e) {
       freelanceSink(FreelancerModel(
