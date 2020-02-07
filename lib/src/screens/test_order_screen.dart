@@ -20,7 +20,6 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('My Orders'),
-          centerTitle: true,
           bottom: TabBar(
             tabs: [
               Tab(
