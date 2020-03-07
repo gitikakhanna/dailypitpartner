@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dailypitpartner/src/models/category_response.dart';
 import 'package:dailypitpartner/src/models/freelance_model.dart';
 import 'package:dailypitpartner/src/models/my_order_model.dart';
 import 'package:dailypitpartner/src/models/order_model.dart';
@@ -12,10 +13,16 @@ final _reusableRoot = 'http://dailypit.com/crmscripts/';
 class DailypitApiProvider {
   Client client = Client();
 
+  Future<CategoryResponse> getCategories() async {
+    final response = await client
+        .get("http://dailypit.com/crmscripts/api/partnerapp/getCategory.php");
+    return CategoryResponse.fromJson(json.decode(response.body) as Map);
+  }
+
   Future<bool> registerUser(Register registerData) async {
     final response = await client.post(
-      '$_root/register_user.php',
-      body: registerData.toMap(),
+      'http://dailypit.com/crmscripts/api/partnerapp/registerUser.php',
+      body: json.encode(registerData.toJson()),
     );
     int res = int.parse(response.body);
     assert(res is int);
