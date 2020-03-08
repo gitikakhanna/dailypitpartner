@@ -25,7 +25,6 @@ class NewDashboardScreen extends StatefulWidget {
 class _NewDashboardScreenState extends State<NewDashboardScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

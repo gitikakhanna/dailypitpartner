@@ -27,7 +27,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     userId = Constants.prefs.getString(Constants.firebase_user_id);
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
@@ -421,7 +420,6 @@ class FreelancerDetailWidget extends StatelessWidget {
 class NotifyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.all(8.0),
       alignment: Alignment.center,
@@ -440,7 +438,6 @@ class NotifyWidget extends StatelessWidget {
 class AcceptNotifyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       margin: EdgeInsets.all(8.0),
       alignment: Alignment.center,

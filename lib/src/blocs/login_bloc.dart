@@ -10,7 +10,7 @@ class LoginBloc extends Object with LoginValidator {
   LoginBloc() {
     if (Constants.prefs.getBool(Constants.pref_logged_in) ?? false) {
       fetchFreelancerData(
-          Constants.prefs.getString(Constants.firebasse_email_id));
+          Constants.prefs.getString(Constants.firebase_user_id));
     }
   }
 
@@ -43,18 +43,19 @@ class LoginBloc extends Object with LoginValidator {
     FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.value, password: _passwordController.value);
 
-    fetchFreelancerData(user.email);
+    //TODO: Update fetch Freelancer Data API here
+    fetchFreelancerData(user.uid);
 
     return user;
   }
 
-  fetchFreelancerData(String email) async {
+  fetchFreelancerData(String uid) async {
     freelanceSink(FreelancerModel(
       name: 'Loading',
     ));
     try {
       List<FreelancerModel> freelancers =
-          await _repository.fetchFreelancerDetail(email);
+          await _repository.fetchFreelancerDetail(uid);
       _freelancerModel = freelancers.first;
       Constants.prefs.setString(Constants.sql_user_id, _freelancerModel.id);
       freelanceSink(freelancers.first);

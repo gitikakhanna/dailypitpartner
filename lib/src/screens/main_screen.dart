@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dailypitpartner/src/resources/dailypit_api_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -27,28 +28,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initMessagingToken();
   }
 
+  //TODO: Update Token to PHP , remove Firebase
   initMessagingToken() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    Firestore.instance
-        .collection('freelancer')
-        .where('emailid', isEqualTo: user.email)
-        .getDocuments()
-        .then((QuerySnapshot sn) {
-      print('Document Id ${sn.documents.first.documentID}');
-
-      _messaging.getToken().then((token) {
-        Firestore.instance
-            .document('freelancer/${sn.documents.first.documentID}')
-            .updateData({
-          'freelancerid': user.uid,
-          'token': token,
-        });
-      });
+    _messaging.getToken().then((token) {
+      DailypitApiProvider().updateFCMToken(user.uid, token);
     });
   }
 

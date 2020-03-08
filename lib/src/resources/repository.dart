@@ -38,7 +38,7 @@ class Repository {
     return await apiProvider.fetchMyOrders(freelancerId);
   }
 
-  Future<List<FreelancerModel>> fetchFreelancerDetail(String email) async {
-    return await apiProvider.fetchFreelancerDetail(email);
+  Future<List<FreelancerModel>> fetchFreelancerDetail(String uid) async {
+    return await apiProvider.fetchFreelancerDetail(uid);
   }
 }

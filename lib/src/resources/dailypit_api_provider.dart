@@ -90,6 +90,26 @@ class DailypitApiProvider {
     }
   }
 
+  Future<bool> updateFCMToken(String uid, String fcmToken) async {
+    try {
+      final response = await client.post(
+        'http://dailypit.com/crmscripts/api/partnerapp/updateFcmToken.php',
+        body: json.encode({'uid': uid, 'fcmtoken': fcmToken}),
+      );
+      int res = int.parse(response.body);
+      assert(res is int);
+      //print('response is $res');
+      if (res == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
   Future<List<OrderModel>> fetchMyOrders(String freelancerId) async {
     final response = await client.post(
       '$_reusableRoot/get_assigned_orders.php',
@@ -101,11 +121,11 @@ class DailypitApiProvider {
     }).toList();
   }
 
-  Future<List<FreelancerModel>> fetchFreelancerDetail(String email) async {
+  Future<List<FreelancerModel>> fetchFreelancerDetail(String uid) async {
     try {
       final response = await client.post(
-        '$_reusableRoot/get_freelancer_data.php',
-        body: {'email': email},
+        'http://dailypit.com/crmscripts/api/partnerapp/getFreelancerData.php',
+        body: {'uid': uid},
       );
       return (json.decode(response.body) as List).map((e) {
         return FreelancerModel.fromJson(e);
