@@ -1,4 +1,5 @@
 import 'package:dailypitpartner/src/models/my_order_model.dart';
+import 'package:dailypitpartner/src/resources/dailypit_api_provider.dart';
 import 'package:dailypitpartner/src/resources/repository.dart';
 import 'package:dailypitpartner/src/utils/rounded_widget.dart';
 import 'package:flutter/material.dart';
@@ -127,8 +128,12 @@ class ServiceDetail extends StatelessWidget {
             ),
           ),
           title: Text(
-            '${snapshot.data.first.subCategoryName}',
+            '${snapshot.data.first.servicename}',
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text(
+            '${snapshot.data.first.servicetype} x ${snapshot.data.first.servicecount}',
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
         );
       },
@@ -136,69 +141,69 @@ class ServiceDetail extends StatelessWidget {
   }
 }
 
-class OrderDetailBuilder extends StatelessWidget {
-  const OrderDetailBuilder({
-    Key key,
-    @required this.orderId,
-  }) : super(key: key);
+// class OrderDetailBuilder extends StatelessWidget {
+//   const OrderDetailBuilder({
+//     Key key,
+//     @required this.orderId,
+//   }) : super(key: key);
 
-  final String orderId;
+//   final String orderId;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.only(top: 0, bottom: 16.0, right: 16.0, left: 16.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(6.0)),
-        color: Colors.white,
-      ),
-      child: StreamBuilder(
-        stream: Firestore.instance.document('orders/$orderId').snapshots(),
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       alignment: Alignment.center,
+//       margin: EdgeInsets.only(top: 0, bottom: 16.0, right: 16.0, left: 16.0),
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.all(Radius.circular(6.0)),
+//         color: Colors.white,
+//       ),
+//       child: StreamBuilder(
+//         stream: Firestore.instance.document('orders/$orderId').snapshots(),
+//         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+//           if (!snapshot.hasData) {
+//             return Center(
+//               child: Padding(
+//                 padding: const EdgeInsets.all(8.0),
+//                 child: CircularProgressIndicator(),
+//               ),
+//             );
+//           }
 
-          return StreamBuilder(
-            stream: Firestore.instance
-                .collection('subcategories')
-                .where('id',
-                    isEqualTo: int.parse(snapshot.data['subcategoryId']))
-                .snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> orderSnapshot) {
-              if (!orderSnapshot.hasData) {
-                return ListTile(
-                  title: Text('Loading'),
-                );
-              }
+//           return StreamBuilder(
+//             stream: Firestore.instance
+//                 .collection('subcategories')
+//                 .where('id',
+//                     isEqualTo: int.parse(snapshot.data['subcategoryId']))
+//                 .snapshots(),
+//             builder: (context, AsyncSnapshot<QuerySnapshot> orderSnapshot) {
+//               if (!orderSnapshot.hasData) {
+//                 return ListTile(
+//                   title: Text('Loading'),
+//                 );
+//               }
 
-              return ListTile(
-                title: Text(
-                  '${orderSnapshot.data.documents.first['name']}',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                  ),
-                ),
-                trailing: Text(
-                  '${snapshot.data['price']}',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-}
+//               return ListTile(
+//                 title: Text(
+//                   '${orderSnapshot.data.documents.first['name']}',
+//                   style: TextStyle(
+//                     fontSize: 18.0,
+//                   ),
+//                 ),
+//                 trailing: Text(
+//                   '${snapshot.data['price']}',
+//                   style: TextStyle(
+//                     fontSize: 18.0,
+//                   ),
+//                 ),
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class UserDetailBuilder extends StatelessWidget {
   const UserDetailBuilder({
@@ -210,6 +215,7 @@ class UserDetailBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _repo = Repository();
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.only(top: 0, bottom: 16.0, right: 16.0, left: 16.0),
@@ -217,48 +223,30 @@ class UserDetailBuilder extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(6.0)),
         color: Colors.white,
       ),
-      child: StreamBuilder(
-          stream: Firestore.instance.document('orders/$orderId').snapshots(),
-          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-
-            return StreamBuilder(
-              stream: Firestore.instance
-                  .collection('users')
-                  .where('userid', isEqualTo: snapshot.data['userId'])
-                  .snapshots(),
-              builder:
-                  (context, AsyncSnapshot<QuerySnapshot> userDataSnapshot) {
-                if (!userDataSnapshot.hasData) {
-                  return ListTile(
-                    title: Text('Loading'),
-                  );
-                }
-
-                return ListTile(
-                  title: Text(
-                    '${userDataSnapshot.data.documents.first['name']}',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  trailing: Text(
-                    '${userDataSnapshot.data.documents.first['address']}',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
-                );
-              },
+      child: FutureBuilder(
+        future: _repo.fetchNewSingleOrder(orderId),
+        builder: (context, AsyncSnapshot<List<MyOrderModel>> snapshot) {
+          if (!snapshot.hasData) {
+            return ListTile(
+              title: Text(
+                'Loading ...',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
             );
-          }),
+          }
+          return ListTile(
+            title: Text(
+              '${snapshot.data.first.username}',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              '${snapshot.data.first.useraddress}',
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ),
+            isThreeLine: true,
+          );
+        },
+      ),
     );
   }
 }
@@ -317,11 +305,13 @@ class AcceptButton extends StatelessWidget {
               );
             },
           );
+          //TODO: Change this method to new API for acceptance of order
           FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-            Firestore.instance.document('orders/$orderId').updateData({
-              'status': 'accepted',
-              'list': FieldValue.arrayUnion(<String>[user.uid])
-            });
+            // Firestore.instance.document('orders/$orderId').updateData({
+            //   'status': 'accepted',
+            //   'list': FieldValue.arrayUnion(<String>[user.uid])
+            // });
+            DailypitApiProvider().acceptServiceOrder(user.uid, orderId);
             print(user.uid);
             Navigator.pop(context);
             Navigator.pop(context, 0);

@@ -12,7 +12,7 @@ class Register {
 
   Register.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    email = json['email'];
+    email = json['emailid'];
     phoneno = json['phoneno'];
     address = json['address'];
     if (json['categories'] != null) {
@@ -26,7 +26,7 @@ class Register {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['email'] = this.email;
+    data['emailid'] = this.email;
     data['phoneno'] = this.phoneno;
     data['address'] = this.address;
     if (this.categories != null) {

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dailypitpartner/src/resources/dailypit_api_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,16 +32,20 @@ class _AppState extends State<App> {
   initFirebaseMessaging() {
     _messaging.configure(
       onMessage: (Map<String, dynamic> map) async {
+        print("On Message");
         if (map['data']['id'] == '1')
           showRequestNotification(map);
         else if (map['data']['id'] == '2') showAssignedNotification(map);
       },
       onResume: (Map<String, dynamic> map) async {
+        print("On resume");
         if (map['data']['id'] == '1')
           showRequestNotification(map);
         else if (map['data']['id'] == '2') showAssignedNotification(map);
       },
       onLaunch: (Map<String, dynamic> map) async {
+        print("On Launch");
+
         if (map['data']['id'] == '1')
           showRequestNotification(map);
         else if (map['data']['id'] == '2') showAssignedNotification(map);
@@ -81,7 +86,7 @@ class _AppState extends State<App> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => CurrentOrderScreen(
-                                    orderId: map['data']['orderId'],
+                                    orderId: map['data']['orderid'],
                                   )),
                         );
                         OverlaySupportEntry.of(context).dismiss();
@@ -134,7 +139,7 @@ class _AppState extends State<App> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => NewOrderScreen(
-                                    orderId: map['data']['orderId'],
+                                    orderId: map['data']['orderid'],
                                   )),
                         );
                         OverlaySupportEntry.of(context).dismiss();
@@ -143,7 +148,7 @@ class _AppState extends State<App> {
                     ),
                     CupertinoButton(
                       onPressed: () {
-                        acceptRequest(map['data']['orderId']);
+                        acceptRequest(map['data']['orderid']);
                         OverlaySupportEntry.of(context).dismiss();
                       },
                       child: Text('Accept'),
@@ -163,17 +168,19 @@ class _AppState extends State<App> {
         );
       },
       duration: Duration(
-        milliseconds: 10000,
+        minutes: 10,
       ),
     );
   }
 
+  //TODO: change this function to new API
   acceptRequest(String orderId) {
     FirebaseAuth.instance.currentUser().then((FirebaseUser user) {
-      Firestore.instance.document('orders/$orderId').updateData({
-        //'status': 'accepted',
-        'list': FieldValue.arrayUnion(<String>[user.uid])
-      });
+      // Firestore.instance.document('orders/$orderId').updateData({
+      //   //'status': 'accepted',
+      //   'list': FieldValue.arrayUnion(<String>[user.uid])
+      // });
+      DailypitApiProvider().acceptServiceOrder(user.uid, orderId);
     });
   }
 

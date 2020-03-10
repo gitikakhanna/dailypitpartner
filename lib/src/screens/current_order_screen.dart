@@ -1,3 +1,4 @@
+import 'package:dailypitpartner/src/models/my_order_model.dart';
 import 'package:dailypitpartner/src/models/order_model.dart';
 import 'package:dailypitpartner/src/target/index.dart';
 import 'package:flutter/material.dart';
@@ -146,8 +147,8 @@ class UserDetailBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _repo.fetchSingleOrder(widget.orderId),
-      builder: (context, AsyncSnapshot<List<OrderModel>> snapshot) {
+      future: _repo.fetchNewSingleOrder(widget.orderId),
+      builder: (context, AsyncSnapshot<List<MyOrderModel>> snapshot) {
         if (!snapshot.hasData) {
           return Center(
               child: Text(
@@ -182,7 +183,7 @@ class UserDetailBuilder extends StatelessWidget {
               subtitle: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  '${snapshot.data.first.userAddress}',
+                  '${snapshot.data.first.useraddress}',
                   overflow: TextOverflow.fade,
                 ),
               ),
@@ -191,7 +192,7 @@ class UserDetailBuilder extends StatelessWidget {
                   //_repo.updateStatus(widget.orderId);
 
                   launch(
-                      'google.navigation:q=${snapshot.data.first.userAddress}');
+                      'google.navigation:q=${snapshot.data.first.useraddress}');
                 },
                 //textColor: Colors.white,
                 color: Colors.green,
@@ -221,8 +222,8 @@ class OrderDetailBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _repo.fetchSingleOrder(widget.orderId),
-      builder: (context, AsyncSnapshot<List<OrderModel>> snapshot) {
+      future: _repo.fetchNewSingleOrder(widget.orderId),
+      builder: (context, AsyncSnapshot<List<MyOrderModel>> snapshot) {
         if (!snapshot.hasData) {
           return Center(
               child: Text(
@@ -239,7 +240,7 @@ class OrderDetailBuilder extends StatelessWidget {
             ListTile(
               subtitle: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('${snapshot.data.first.orderId}'),
+                child: Text('${snapshot.data.first.orderid}'),
               ),
               title: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -250,16 +251,19 @@ class OrderDetailBuilder extends StatelessWidget {
               height: 8,
             ),
             ListTile(
-              title: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('${snapshot.data.first.subCategoryName}'),
-              ),
-              trailing: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${snapshot.data.first.price}',
-                  overflow: TextOverflow.fade,
+              trailing: Text(
+                '${snapshot.data.first.price}',
+                style: TextStyle(
+                  fontSize: 16.0,
                 ),
+              ),
+              title: Text(
+                '${snapshot.data.first.servicename}',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                '${snapshot.data.first.servicetype} x ${snapshot.data.first.servicecount}',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(
@@ -288,6 +292,7 @@ class OrderDetailBuilder extends StatelessWidget {
                                     FlatButton(
                                       child: Text('Confirm'),
                                       onPressed: () {
+                                        //TODO: Update this status update API
                                         _repo.updateStatus(widget.orderId);
                                         TargetBloc().dispatch(UpdateTargetEvent(
                                             value:
@@ -335,8 +340,8 @@ class NavigationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _repo.fetchSingleOrder(widget.orderId),
-      builder: (context, AsyncSnapshot<List<OrderModel>> snapshot) {
+      future: _repo.fetchNewSingleOrder(widget.orderId),
+      builder: (context, AsyncSnapshot<List<MyOrderModel>> snapshot) {
         if (!snapshot.hasData) {
           return Text(
             'Loading',
@@ -346,7 +351,7 @@ class NavigationButton extends StatelessWidget {
         return IconButton(
           onPressed: () {
             //_repo.updateStatus(widget.orderId);
-            launch('google.navigation:q=${snapshot.data.first.userAddress}');
+            launch('google.navigation:q=${snapshot.data.first.useraddress}');
           },
           //textColor: Colors.white,
           color: Colors.green,

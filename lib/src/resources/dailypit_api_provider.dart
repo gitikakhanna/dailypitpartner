@@ -35,8 +35,8 @@ class DailypitApiProvider {
 
   Future<List<MyOrderModel>> fetchNewSingleOrder(String orderId) async {
     final response = await client.post(
-      '$_reusableRoot/get_single_order.php',
-      body: {'id': orderId},
+      'https://dailypit.com/crmscripts/api/partnerapp/getServiceOrder.php',
+      body: {'orderid': orderId},
     );
     print(response.body);
     return (json.decode(response.body) as List).map((e) {
@@ -95,6 +95,26 @@ class DailypitApiProvider {
       final response = await client.post(
         'http://dailypit.com/crmscripts/api/partnerapp/updateFcmToken.php',
         body: json.encode({'uid': uid, 'fcmtoken': fcmToken}),
+      );
+      int res = int.parse(response.body);
+      assert(res is int);
+      //print('response is $res');
+      if (res == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  Future<bool> acceptServiceOrder(String uid, String orderId) async {
+    try {
+      final response = await client.post(
+        'http://dailypit.com/crmscripts/api/partnerapp/acceptServiceOrder.php',
+        body: {'uid': uid, 'orderId': orderId},
       );
       int res = int.parse(response.body);
       assert(res is int);
