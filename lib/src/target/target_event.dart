@@ -18,7 +18,7 @@ class LoadTargetEvent extends TargetEvent {
       {TargetState currentState, TargetBloc bloc}) async {
     try {
       TargetResponse res = await _targetRepository.getPartnerTarget();
-      if (res.id != 0) {
+      if (res.code != null) {
         if (res.isCompleted) {
           return CompletedTargetState(targetResponse: res);
         } else {

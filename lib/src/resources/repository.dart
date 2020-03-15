@@ -34,7 +34,7 @@ class Repository {
     return await apiProvider.updatePassword(phoneNumber, password);
   }
 
-  Future<List<OrderModel>> fetchMyOrders(String freelancerId) async {
+  Future<List<MyOrderModel>> fetchMyOrders(String freelancerId) async {
     return await apiProvider.fetchMyOrders(freelancerId);
   }
 

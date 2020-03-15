@@ -1,3 +1,4 @@
+import 'package:dailypitpartner/src/models/my_order_model.dart';
 import 'package:dailypitpartner/src/models/order_model.dart';
 import 'package:dailypitpartner/src/resources/repository.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class TabOrderWidget extends StatelessWidget {
           print(user.data.uid);
           return FutureBuilder(
             future: Repository().fetchMyOrders(user.data.uid),
-            builder: (context, AsyncSnapshot<List<OrderModel>> myOrders) {
+            builder: (context, AsyncSnapshot<List<MyOrderModel>> myOrders) {
               if (!myOrders.hasData) {
                 return Center(
                   child: CircularProgressIndicator(),
@@ -89,7 +90,7 @@ class TabOrderWidget extends StatelessWidget {
               return ListView.builder(
                 itemCount: myOrders.data.length,
                 itemBuilder: (context, index) {
-                  OrderModel myOrder;
+                  MyOrderModel myOrder;
                   if (type == 0) {
                     if (myOrders.data[index].status != 'completed')
                       myOrder = myOrders.data[index];
@@ -107,14 +108,14 @@ class TabOrderWidget extends StatelessWidget {
                                 BorderRadius.all(Radius.circular(6.0)),
                           ),
                           child: ListTile(
-                              title: Text('${myOrder.subCategoryName}'),
+                              title: Text('${myOrder.servicename}'),
                               subtitle: Text('${myOrder.price}'),
                               trailing: Text('${myOrder.status}'),
                               onTap: () {
                                 //if (myOrder.status.toString().toLowerCase() ==
                                 //'assigned') {
                                 Navigator.pushNamed(
-                                    context, '/c${myOrder.orderId}');
+                                    context, '/c${myOrder.orderid}');
                                 //}
                               }),
                         );

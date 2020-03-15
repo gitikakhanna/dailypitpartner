@@ -57,7 +57,7 @@ class DailypitApiProvider {
 
   Future<bool> updateStatus(String orderId) async {
     final response = await client.post(
-      '$_reusableRoot/update_status.php',
+      'http://dailypit.com/crmscripts/api/partnerapp/updateServiceOrderStatus.php',
       body: {
         'orderid': orderId,
       },
@@ -130,14 +130,14 @@ class DailypitApiProvider {
     return false;
   }
 
-  Future<List<OrderModel>> fetchMyOrders(String freelancerId) async {
+  Future<List<MyOrderModel>> fetchMyOrders(String freelancerId) async {
     final response = await client.post(
-      '$_reusableRoot/get_assigned_orders.php',
-      body: {'id': freelancerId},
+      'http://dailypit.com/crmscripts/api/partnerapp/getAssignedOrders.php', //'$_reusableRoot/get_assigned_orders.php',
+      body: {'uid': freelancerId},
     );
     print('response is ${response.body}');
     return (json.decode(response.body) as List).map((e) {
-      return OrderModel.fromJson(e);
+      return MyOrderModel.fromJson(e);
     }).toList();
   }
 

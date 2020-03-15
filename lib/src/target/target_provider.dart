@@ -21,15 +21,16 @@ class TargetProvider implements ITargetProvider {
 
   @override
   Future getPartnerTarget() async {
-    String id = Constants.prefs.getString(Constants.sql_user_id);
+    String uid = Constants.prefs.getString(Constants.sql_user_id);
     try {
       final response = await client.post(
-        kGetPartnerTarget,
-        body: {'id': id},
+        "http://dailypit.com/crmscripts/api/partnerapp/getTarget.php",
+        body: {'uid': uid},
       );
       var resultClass = await compute(jsonParserIsolate, response.body);
       TargetResponse res = TargetResponse.fromJson(resultClass);
       Constants.prefs.setInt(Constants.current_target_id, res.id);
+      Constants.prefs.setString(Constants.current_target_code, res.code);
       Constants.prefs.setBool(Constants.isTargetCompleted, res.isCompleted);
       return res;
       //return res;
@@ -40,12 +41,12 @@ class TargetProvider implements ITargetProvider {
 
   @override
   Future updatePartnerTarget(String value) async {
-    int id = Constants.prefs.getInt(Constants.current_target_id);
+    String code = Constants.prefs.getString(Constants.current_target_code);
     try {
       final response = await client.post(
-        "https://dailypit.com/crmscripts/partnerUpdateTarget.php",
+        "http://dailypit.com/crmscripts/api/partnerapp/updateTarget.php",
         body: {
-          'target_id': "$id",
+          'code': code,
           'value': value,
         },
       );

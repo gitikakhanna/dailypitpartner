@@ -277,7 +277,7 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                                       MediaQuery.of(context).size.height * 0.25,
                                   fit: BoxFit.fill,
                                   imageUrl:
-                                      "http://dailypit.com/images/targetinitial.jfif"),
+                                      "${currentState.targetResponse.beforeimage}"),
                             ),
                           ),
                         ],
@@ -328,7 +328,7 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                                       MediaQuery.of(context).size.height * 0.25,
                                   fit: BoxFit.fill,
                                   imageUrl:
-                                      "http://dailypit.com/images/target.jpeg"),
+                                      "${currentState.targetResponse.afterimage}"),
                             ),
                           ),
                         ],

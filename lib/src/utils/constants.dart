@@ -11,4 +11,5 @@ class Constants {
   static const String firebasse_email_id = "firebaseEmailID";
   static const String isTargetCompleted = "isTargetCompleted";
   static const String current_target_id = "currentTargetId";
+  static const String current_target_code = "currentTargetCode";
 }
