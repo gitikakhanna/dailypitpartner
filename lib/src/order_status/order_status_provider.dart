@@ -19,7 +19,7 @@ class OrderStatusProvider implements IOrderStatusProvider {
     String freelancerId = Constants.prefs.getString(Constants.firebase_user_id);
     try {
       final response = await client.post(
-        kGetOrderStatus,
+        'http://dailypit.com/crmscripts/api/partnerapp/getOrderStatus.php',
         body: {'freelancerId': freelancerId},
       );
       var resultClass = await compute(jsonParserIsolate, response.body);

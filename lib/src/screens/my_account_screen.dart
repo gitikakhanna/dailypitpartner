@@ -1,10 +1,13 @@
 import 'package:dailypitpartner/src/blocs/login_provider.dart';
+import 'package:dailypitpartner/src/models/freelance_model.dart';
 import 'package:dailypitpartner/src/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:overlay_support/overlay_support.dart';
+
+import 'edit_profile_screen.dart';
 
 class MyAccountScreen extends StatefulWidget {
   MyAccountScreen({Key key}) : super(key: key);
@@ -26,63 +29,109 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
           SizedBox(
             height: 8.0,
           ),
-          FutureBuilder(
-            future: FirebaseAuth.instance.currentUser(),
-            builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-              if (!snapshot.hasData) {
-                return ListTile(
-                  title: Container(
-                    height: 50.0,
-                    color: Colors.grey[200],
-                  ),
-                );
-              }
-
-              return StreamBuilder(
-                stream: Firestore.instance
-                    .collection('freelancer')
-                    .where('freelancerid', isEqualTo: snapshot.data.uid)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> userSnapshot) {
-                  if (!userSnapshot.hasData) {
-                    return ListTile(
-                      title: Container(
-                        height: 20.0,
-                        color: Colors.grey[200],
-                      ),
-                    );
-                  }
-                  if (userSnapshot.data.documents.length == 0) {
-                    return ListTile(
-                      title: Text('Please Login to get full experience'),
-                    );
-                  }
-
+          StreamBuilder(
+            stream: bloc.freelanceStream,
+            builder: (BuildContext context,
+                AsyncSnapshot<FreelancerModel> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data.name == 'Loading') {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.data.name == 'Error') {
+                  return Center(
+                    child: Text('Something is Wrong'),
+                  );
+                } else {
                   return ListTile(
                     leading: Icon(Icons.account_circle),
                     title: Text(
-                      '${userSnapshot.data.documents.first.data['name']}',
+                      '${snapshot.data.name}',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                       ),
                     ),
                     subtitle: Text(
-                      '${userSnapshot.data.documents.first.data['phoneno']}',
+                      '${snapshot.data.phoneno}',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () {
-                        print("Go to My Profile editable");
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return EditProfileScreen(
+                            freelancer: snapshot.data,
+                            loginBloc: LoginProvider.of(context),
+                          );
+                        }));
                       },
                     ),
                   );
-                },
-              );
+                }
+              }
+              return Container();
             },
           ),
+          // FutureBuilder(
+          //   future: FirebaseAuth.instance.currentUser(),
+          //   builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+          //     if (!snapshot.hasData) {
+          //       return ListTile(
+          //         title: Container(
+          //           height: 50.0,
+          //           color: Colors.grey[200],
+          //         ),
+          //       );
+          //     }
+
+          //     return StreamBuilder(
+          //       stream: Firestore.instance
+          //           .collection('freelancer')
+          //           .where('freelancerid', isEqualTo: snapshot.data.uid)
+          //           .snapshots(),
+          //       builder: (context, AsyncSnapshot<QuerySnapshot> userSnapshot) {
+          //         if (!userSnapshot.hasData) {
+          //           return ListTile(
+          //             title: Container(
+          //               height: 20.0,
+          //               color: Colors.grey[200],
+          //             ),
+          //           );
+          //         }
+          //         if (userSnapshot.data.documents.length == 0) {
+          //           return ListTile(
+          //             title: Text('Please Login to get full experience'),
+          //           );
+          //         }
+
+          //         return ListTile(
+          //           leading: Icon(Icons.account_circle),
+          //           title: Text(
+          //             '${userSnapshot.data.documents.first.data['name']}',
+          //             style: TextStyle(
+          //               fontSize: 20,
+          //             ),
+          //           ),
+          //           subtitle: Text(
+          //             '${userSnapshot.data.documents.first.data['phoneno']}',
+          //             style: TextStyle(
+          //               fontSize: 18,
+          //             ),
+          //           ),
+          //           trailing: IconButton(
+          //             icon: Icon(Icons.edit),
+          //             onPressed: () {
+          //               print("Go to My Profile editable");
+          //             },
+          //           ),
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
           Divider(
             height: 8.0,
           ),

@@ -96,7 +96,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             content: CupertinoActivityIndicator(),
           );
         });
-    var uri = Uri.parse('http://dailypit.com/crmscripts/update_freelancer.php');
+    var uri = Uri.parse(
+        'http://dailypit.com/crmscripts/api/partnerapp/updateFreelancer.php');
     FormData formData = new FormData.from({
       'phone': editedFreelancer.phoneno,
       'name': editedFreelancer.name,
@@ -133,8 +134,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 CupertinoButton(
                   child: Text('Ok'),
                   onPressed: () {
-                    widget.loginBloc.fetchFreelancerData(Constants.prefs
-                        .getString(Constants.firebasse_email_id));
+                    widget.loginBloc.fetchFreelancerData(
+                        Constants.prefs.getString(Constants.firebase_user_id));
                     Navigator.pop(context);
                     Navigator.pop(context);
                   },
