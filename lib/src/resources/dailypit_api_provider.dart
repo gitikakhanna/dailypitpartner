@@ -74,7 +74,7 @@ class DailypitApiProvider {
 
   Future<bool> updatePassword(String phoneNumber, String password) async {
     final response = await client.post(
-      '$_reusableRoot/change_freelancer_password.php',
+      'http://dailypit.com/crmscripts/api/partnerapp/updatePassword.php',
       body: {
         'phone': phoneNumber,
         'password': password,
