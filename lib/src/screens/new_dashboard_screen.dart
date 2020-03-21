@@ -186,8 +186,9 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.transparent,
-                    backgroundImage:
-                        CachedNetworkImageProvider(widget.freelancer.image),
+                    backgroundImage: CachedNetworkImageProvider(
+                      widget.freelancer.image.trim(),
+                    ),
                   ),
                   SizedBox(
                     height: 10,
@@ -240,8 +241,13 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                             radius: 120.0,
                             lineWidth: 13.0,
                             animation: true,
-                            percent:
-                                (currentState.targetResponse.achievedvalue) /
+                            percent: (currentState
+                                            .targetResponse.achievedvalue) /
+                                        (currentState
+                                            .targetResponse.targetvalue) >=
+                                    1.0
+                                ? 1.0
+                                : (currentState.targetResponse.achievedvalue) /
                                     (currentState.targetResponse.targetvalue),
                             center: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -291,8 +297,13 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                             radius: 120.0,
                             lineWidth: 13.0,
                             animation: true,
-                            percent:
-                                (currentState.targetResponse.achievedvalue) /
+                            percent: (currentState
+                                            .targetResponse.achievedvalue) /
+                                        (currentState
+                                            .targetResponse.targetvalue) >=
+                                    1.0
+                                ? 1.0
+                                : (currentState.targetResponse.achievedvalue) /
                                     (currentState.targetResponse.targetvalue),
                             center: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

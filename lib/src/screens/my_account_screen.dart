@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import 'edit_profile_screen.dart';
@@ -231,17 +232,20 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                                   .reAuthenticate(reenteredPassword);
                               if (result) {
                                 Navigator.pop(context);
-                                toast('Password Updated Successfully !!');
+                                Fluttertoast.showToast(
+                                    msg: 'Password Updated Successfully !!');
                                 FirebaseAuth.instance.signOut();
                                 Constants.prefs
                                     .setBool(Constants.pref_logged_in, false);
                                 Navigator.popAndPushNamed(context, '/l');
                               } else {
                                 Navigator.pop(context);
-                                toast('Oops Something is Wrong');
+                                Fluttertoast.showToast(
+                                    msg: 'Oops Something is Wrong');
                               }
                             } else {
-                              toast('Entered Password is not same');
+                              Fluttertoast.showToast(
+                                  msg: 'Entered Password is not same');
                             }
                           },
                           child: Text('Change'),

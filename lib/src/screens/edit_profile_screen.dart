@@ -46,7 +46,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Column(
           children: <Widget>[
             profileImageSection(),
-            documentSection(),
+            //documentSection(),
             formSection(),
             Container(
               padding: EdgeInsets.all(16),
