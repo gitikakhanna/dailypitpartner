@@ -111,6 +111,8 @@ class FreelancerModel {
   String password;
   String fcmToken;
   String uid;
+  String rating;
+  String freelancerId;
   String createdAt;
   String updatedAt;
 
@@ -130,7 +132,9 @@ class FreelancerModel {
       this.doc,
       this.status,
       this.password,
+      this.rating,
       this.fcmToken,
+      this.freelancerId,
       this.uid,
       this.createdAt,
       this.updatedAt});
@@ -152,6 +156,8 @@ class FreelancerModel {
     status = json['status'];
     password = json['password'];
     fcmToken = json['fcm_token'];
+    freelancerId = json['freelancerid'];
+    rating = json['rating'];
     uid = json['uid'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -166,6 +172,8 @@ class FreelancerModel {
     data['phoneno'] = this.phoneno;
     data['emailid'] = this.emailid;
     data['address'] = this.address;
+    data['rating'] = this.rating;
+    data['freelancerid'] = this.freelancerId;
     data['qualification'] = this.qualification;
     data['experience'] = this.experience;
     data['location'] = this.location;

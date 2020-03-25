@@ -193,12 +193,54 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    '${widget.freelancer.name}',
-                    style: Theme.of(context).textTheme.title,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '${widget.freelancer.freelancerId}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 10,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '${widget.freelancer.name}',
+                        style: Theme.of(context).textTheme.title,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Chip(
+                          backgroundColor: Colors.blue,
+                          label: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.star,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                widget.freelancer.rating == null
+                                    ? 'Not Rated'
+                                    : '${widget.freelancer.rating}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   Text(
                     '${widget.freelancer.emailid}',
@@ -438,50 +480,50 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
           SizedBox(
             height: 10,
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Card(
-                  elevation: 12.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        changeStatus();
-                      },
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.blue[300],
-                              Colors.blue,
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            'Change Status',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: <Widget>[
+          //     Expanded(
+          //       flex: 1,
+          //       child: Card(
+          //         elevation: 12.0,
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(20.0),
+          //         ),
+          //         child: Material(
+          //           color: Colors.transparent,
+          //           child: InkWell(
+          //             onTap: () {
+          //               changeStatus();
+          //             },
+          //             borderRadius: BorderRadius.circular(20.0),
+          //             child: Container(
+          //               alignment: Alignment.center,
+          //               decoration: BoxDecoration(
+          //                 gradient: LinearGradient(
+          //                   colors: [
+          //                     Colors.blue[300],
+          //                     Colors.blue,
+          //                   ],
+          //                 ),
+          //                 borderRadius: BorderRadius.circular(20.0),
+          //               ),
+          //               child: Padding(
+          //                 padding: const EdgeInsets.all(12.0),
+          //                 child: Text(
+          //                   'Change Status',
+          //                   style: TextStyle(
+          //                     color: Colors.white,
+          //                     fontSize: 18,
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Row(
             children: <Widget>[
               Expanded(
