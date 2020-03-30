@@ -279,42 +279,47 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                     if (currentState is InCompletedTargetState) {
                       return Column(
                         children: <Widget>[
-                          CircularPercentIndicator(
-                            radius: 120.0,
-                            lineWidth: 13.0,
-                            animation: true,
-                            percent: (currentState
-                                            .targetResponse.achievedvalue) /
-                                        (currentState
-                                            .targetResponse.targetvalue) >=
-                                    1.0
-                                ? 1.0
-                                : (currentState.targetResponse.achievedvalue) /
-                                    (currentState.targetResponse.targetvalue),
-                            center: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                    '${currentState.targetResponse.achievedvalue}',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                Text(
-                                    '/${currentState.targetResponse.targetvalue}',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            footer: new Text(
-                              "Target to Achieve",
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.0),
-                            ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: Colors.purple,
-                          ),
+                          currentState.targetResponse.targetvalue != 0
+                              ? CircularPercentIndicator(
+                                  radius: 120.0,
+                                  lineWidth: 13.0,
+                                  animation: true,
+                                  percent: (currentState.targetResponse
+                                                  .achievedvalue) /
+                                              (currentState.targetResponse
+                                                  .targetvalue) >=
+                                          1.0
+                                      ? 1.0
+                                      : (currentState
+                                              .targetResponse.achievedvalue) /
+                                          (currentState
+                                              .targetResponse.targetvalue),
+                                  center: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                          '${currentState.targetResponse.achievedvalue}',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                          '/${currentState.targetResponse.targetvalue}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  footer: new Text(
+                                    "Target to Achieve",
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17.0),
+                                  ),
+                                  circularStrokeCap: CircularStrokeCap.round,
+                                  progressColor: Colors.purple,
+                                )
+                              : Offstage(),
                           Container(
                             margin: EdgeInsets.all(12),
                             child: ClipRRect(
@@ -335,42 +340,47 @@ class _FreelancerProfileCardState extends State<FreelancerProfileCard> {
                     if (currentState is CompletedTargetState) {
                       return Column(
                         children: <Widget>[
-                          CircularPercentIndicator(
-                            radius: 120.0,
-                            lineWidth: 13.0,
-                            animation: true,
-                            percent: (currentState
-                                            .targetResponse.achievedvalue) /
-                                        (currentState
-                                            .targetResponse.targetvalue) >=
-                                    1.0
-                                ? 1.0
-                                : (currentState.targetResponse.achievedvalue) /
-                                    (currentState.targetResponse.targetvalue),
-                            center: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                    '${currentState.targetResponse.achievedvalue}',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                Text(
-                                    '/${currentState.targetResponse.targetvalue}',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            footer: new Text(
-                              "Target Achieved",
-                              style: new TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.0),
-                            ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: Colors.purple,
-                          ),
+                          currentState.targetResponse.targetvalue != 0
+                              ? CircularPercentIndicator(
+                                  radius: 120.0,
+                                  lineWidth: 13.0,
+                                  animation: true,
+                                  percent: (currentState.targetResponse
+                                                  .achievedvalue) /
+                                              (currentState.targetResponse
+                                                  .targetvalue) >=
+                                          1.0
+                                      ? 1.0
+                                      : (currentState
+                                              .targetResponse.achievedvalue) /
+                                          (currentState
+                                              .targetResponse.targetvalue),
+                                  center: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                          '${currentState.targetResponse.achievedvalue}',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                          '/${currentState.targetResponse.targetvalue}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  footer: new Text(
+                                    "Target Achieved",
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17.0),
+                                  ),
+                                  circularStrokeCap: CircularStrokeCap.round,
+                                  progressColor: Colors.purple,
+                                )
+                              : Offstage(),
                           Container(
                             margin: EdgeInsets.all(12),
                             child: ClipRRect(
